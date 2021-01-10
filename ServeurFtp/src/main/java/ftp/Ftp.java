@@ -65,8 +65,24 @@ public class Ftp {
         readerData = new BufferedInputStream(socketData.getInputStream());
         writerData = new BufferedWriter(new OutputStreamWriter(socketData.getOutputStream()));
     }
-    public void quirt(){
-        //TODO
+    public void quit(){
+        try{
+            send("QUIT");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(socket != null){
+                try{
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    socket = null;
+                }
+            }
+        }
     }
 
     public void cd(String dir) throws IOException{
@@ -74,7 +90,8 @@ public class Ftp {
     }
 
     public String pwd() throws IOException{
-        return "";
+        send("PWD");
+        return read();
     }
 
     private void send(String command) throws IOException{
