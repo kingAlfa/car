@@ -85,14 +85,16 @@ public class Ftp {
         }
     }
 
-    public void cd(String dir) throws IOException{
-        //TODO
+    public String cwd(String dir) throws IOException{
+       send("CWD " + dir);
+       return read();
     }
 
     public String pwd() throws IOException{
         send("PWD");
         return read();
     }
+
 
     private void send(String command) throws IOException{
         command +="\r\n";
@@ -108,6 +110,7 @@ public class Ftp {
         byte[] b = new byte[4096];
         stream = reader.read(b);
         response = new String(b,0,stream);
+        
         if(DEBUG)
             log(response);
         return response;
@@ -126,7 +129,7 @@ public class Ftp {
     }
 
     private void log(String response) {
-        System.out.println(">>"+response);
+        System.out.println(">> "+response);
     }
 
     public void debugMode(boolean active){

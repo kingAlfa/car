@@ -15,7 +15,7 @@ public class Main {
 
             System.out.println("==================================================");
             System.out.println("Vous etes maintenant  connecté au FTP");
-            System.out.println("Vous avez droit au commands QUIT et PWD");
+            System.out.println("Vous avez droit au commands CD,PWD et QUI");
             System.out.println("==================================================");
 
             String respponse = "";
@@ -27,6 +27,11 @@ public class Main {
                 switch (respponse){
                     case "PWD":
                         System.out.println(ftp.pwd());
+                        break;
+                    case "CWD":
+                        System.out.println("Entrez le repertoir ou vous voulez aller");
+                        String dir = sc.nextLine();
+                        System.out.println(ftp.cwd(dir));
                         break;
                     case "QUIT":
                         ftp.quit();
