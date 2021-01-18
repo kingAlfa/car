@@ -1,3 +1,3 @@
-public enum statusUser {
+public enum StatusUser {
     NOTLOGGEDION, ENTEREDUSERNAME,LOGGEDIN
 }

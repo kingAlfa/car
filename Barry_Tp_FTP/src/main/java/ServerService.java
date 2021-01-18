@@ -21,7 +21,7 @@ public class ServerService extends Thread{
     private OutputStream os;
 
     //gestion de l'utilisateur
-    private statusUser currentUserStatus = statusUser.NOTLOGGEDION;
+    private StatusUser currentUserStatus = StatusUser.NOTLOGGEDION;
     private String UserValid = "Barry";
     private String PassWord  = "Car2021";
 
@@ -33,7 +33,7 @@ public class ServerService extends Thread{
         super();
         this.clientSocket = soClient;
         this.dataPort = dataPort;
-        this.currentDir = System.getProperty("user.dir")+"/src";
+        this.currentDir = System.getProperty("user.dir")+"/data";
         this.root = System.getProperty("user.dir");
     }
 
@@ -71,34 +71,65 @@ public class ServerService extends Thread{
     }
 
     private void executeCommand(String c) throws IOException {
+        debugOutPut("LA REQUETE "+c);
         int index = c.indexOf(' ');
-        String command = ((index == -1)? c.toUpperCase(): (c.substring(0,index)).toUpperCase());
+        String command = ((index == -1)? c.toUpperCase(): (c.substring(0,index)).toUpperCase()).trim();
         String args = ((index == -1)? null : c.substring(index + 1,c.length()));
-
         debugOutPut("Command " +command + "  Args : "+ args);
 
-        switch (command){
-            case "USER":
-                handlerUser(args);
-                break;
-            case "PASS":
-                handlerPass(args);
-            case "PWD":
-                handlerPwd();
-                break;
-            case "QUIT":
-                handlerQuit();
-                break;
-            case "CWD":
-                handlerCwd(args);
-                break;
-            default:
-                sendMessageToClient("501 Command inconnue");
-                break;
+
+        if(command.equals("USER")){
+            assert args != null;
+            handlerUser(args);
+        }
+        else if(command.equals("PASS")){
+            handlerPass(args);
+        }
+        else if(command.equals("PWD")){
+            handlerPwd();
+        }
+        else if(command.equals("QUIT")){
+            handlerQuit();
+        }
+        else if(command.equals("CWD")){
+            assert args != null;
+            controlCwd(args);
+        }
+        else if(command.equals("RETR")){
+            handleRetr(args);
+        }
+        else{
+            sendMessageToClient("501 Command inconnue");
+        }
+
+    }
+
+    private void handleRetr(String args) throws IOException {
+        File f = new File(currentDir + separateur + args);
+
+        if(!f.exists()){
+            sendMessageToClient("550 File does not exist");
+        }
+
+        else{
+            //binary mode
+            if(modeDeTransfer == typeDeTransfert.BINARY){
+                BufferedOutputStream fout = null;
+                BufferedInputStream fIn= null;
+
+                sendMessageToClient("150 Opening binary mode transfert for the file "+f.getName());
+
+                try{
+                    //create streams
+
+                }catch (Exception e){
+                    debugOutPut("Could not create file!");
+                }
+            }
         }
     }
 
-    private void handlerCwd(String args) throws IOException {
+    private void controlCwd(String args) throws IOException {
         String filename = currentDir;
 
         // cas de cwd ..
@@ -110,7 +141,7 @@ public class ServerService extends Thread{
         }
 
         // cas de cwd . qui ne fait rien
-        else if((args!= null ) && !args.equals(".")){
+        else if((args!= null ) && (!args.equals("."))){
             filename = filename + separateur + args;
         }
 
@@ -118,9 +149,11 @@ public class ServerService extends Thread{
         if(f.exists() && f.isDirectory() && (filename.length() >= root.length())){
             currentDir = filename;
             sendMessageToClient("250 The current  directory has been changed to "+ currentDir);
+            //clientOut.writeBytes("250 The current  directory has been changed to "+ currentDir );
         }
         else{
             sendMessageToClient("550 File unavailable");
+           // clientOut.writeBytes("550 file unavailable");
         }
     }
 
@@ -134,12 +167,12 @@ public class ServerService extends Thread{
     }
 
     private void handlerPass(String passWord) throws IOException {
-        if(currentUserStatus == statusUser.ENTEREDUSERNAME && passWord.equals(PassWord)){
-            currentUserStatus = statusUser.LOGGEDIN;
+        if(currentUserStatus == StatusUser.ENTEREDUSERNAME && passWord.equals(PassWord)){
+            currentUserStatus = StatusUser.LOGGEDIN;
             sendMessageToClient("230 welcome to FTP-SERVER");
             sendMessageToClient("230 User logged well");
         }
-        else if(currentUserStatus == statusUser.LOGGEDIN){
+        else if(currentUserStatus == StatusUser.LOGGEDIN){
             sendMessageToClient("530 already logged");
         }
         else{
@@ -150,9 +183,9 @@ public class ServerService extends Thread{
     private void handlerUser(String username) throws IOException {
         if(username.equalsIgnoreCase(UserValid)){
             sendMessageToClient("331 User name Ok, know the password ? ");
-            currentUserStatus = statusUser.ENTEREDUSERNAME;
+            currentUserStatus = StatusUser.ENTEREDUSERNAME;
         }
-        else if(currentUserStatus == statusUser.LOGGEDIN){
+        else if(currentUserStatus == StatusUser.LOGGEDIN){
             sendMessageToClient("550 user already logged");
         }
         else{
