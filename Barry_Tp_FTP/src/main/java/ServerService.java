@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -88,9 +85,38 @@ public class ServerService extends Thread{
             case "QUIT":
                 handlerQuit();
                 break;
+            case "CWD":
+                handlerCwd(args);
+                break;
             default:
                 sendMessageToClient("501 Command inconnue");
                 break;
+        }
+    }
+
+    private void handlerCwd(String args) {
+        String filename = currentDir;
+
+        // cas de cwd ..
+        if(args.equals("..")){
+             int ind= filename.lastIndexOf(separateur);
+             if(ind > 0){
+                 filename = filename.substring(0,ind);
+             }
+        }
+
+        // cas de cwd . qui ne fait rien
+        else if((args!= null ) && !args.equals(".")){
+            filename = filename + separateur + args;
+        }
+
+        File f = new File(filename);
+        if(f.exists() && f.isDirectory() && (filename.length() >= root.length())){
+            currentDir = filename;
+            sendMessageToClient("250 The current  directory has been changed to "+ currentDir);
+        }
+        else{
+            sendMessageToClient("550 File unavailable");
         }
     }
 
