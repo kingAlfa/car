@@ -85,13 +85,22 @@ public class ServerService extends Thread{
             case "PWD":
                 handlerPwd();
                 break;
+            case "QUIT":
+                handlerQuit();
+                break;
             default:
                 sendMessageToClient("501 Command inconnue");
                 break;
         }
     }
 
+    private void handlerQuit() {
+        sendMessageToClient("221 Closing connection ");
+        quitCommandLoop = true;
+    }
+
     private void handlerPwd() {
+        sendMessageToClient("257 \""+ currentDir + "\"");
     }
 
     private void handlerPass(String passWord) {
