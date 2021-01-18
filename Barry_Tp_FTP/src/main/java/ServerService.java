@@ -13,10 +13,12 @@ public class ServerService extends Thread{
     private Socket clientSocket;
     private PrintWriter clientOutWriter;
     private BufferedReader clientIn;
+    private DataOutputStream clientOut;
     //gestion des données
     private ServerSocket dataSocket;
     private Socket dataConnexion;
     private PrintWriter dataOutWriter;
+    private OutputStream os;
 
     //gestion de l'utilisateur
     private statusUser currentUserStatus = statusUser.NOTLOGGEDION;
@@ -31,14 +33,15 @@ public class ServerService extends Thread{
         super();
         this.clientSocket = soClient;
         this.dataPort = dataPort;
-        this.currentDir = System.getProperty("user.dir")+"/test";
+        this.currentDir = System.getProperty("user.dir")+"/src";
         this.root = System.getProperty("user.dir");
     }
 
     public  void run(){
         try{
             clientIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            clientOutWriter = new PrintWriter(clientSocket.getOutputStream(),true);
+            clientOut = new DataOutputStream(clientSocket.getOutputStream());
+            //clientOutWriter = new PrintWriter(clientSocket.getOutputStream(),true);
 
             sendMessageToClient("220 Welcome to the Barry FTP SERVER...");
             while(!quitCommandLoop){
@@ -50,7 +53,8 @@ public class ServerService extends Thread{
         finally {
             try{
                 clientIn.close();
-                clientOutWriter.close();
+                clientOut.close();
+                //clientOutWriter.close();
                 clientSocket.close();
                 debugOutPut("Sockets fermée et le server arreté...");
             } catch (IOException e) {
@@ -66,12 +70,12 @@ public class ServerService extends Thread{
         }
     }
 
-    private void executeCommand(String c) {
+    private void executeCommand(String c) throws IOException {
         int index = c.indexOf(' ');
         String command = ((index == -1)? c.toUpperCase(): (c.substring(0,index)).toUpperCase());
         String args = ((index == -1)? null : c.substring(index + 1,c.length()));
 
-        debugOutPut("Command " +command + "Args : "+ args);
+        debugOutPut("Command " +command + "  Args : "+ args);
 
         switch (command){
             case "USER":
@@ -94,7 +98,7 @@ public class ServerService extends Thread{
         }
     }
 
-    private void handlerCwd(String args) {
+    private void handlerCwd(String args) throws IOException {
         String filename = currentDir;
 
         // cas de cwd ..
@@ -120,16 +124,16 @@ public class ServerService extends Thread{
         }
     }
 
-    private void handlerQuit() {
+    private void handlerQuit() throws IOException {
         sendMessageToClient("221 Closing connection ");
         quitCommandLoop = true;
     }
 
-    private void handlerPwd() {
+    private void handlerPwd() throws IOException {
         sendMessageToClient("257 \""+ currentDir + "\"");
     }
 
-    private void handlerPass(String passWord) {
+    private void handlerPass(String passWord) throws IOException {
         if(currentUserStatus == statusUser.ENTEREDUSERNAME && passWord.equals(PassWord)){
             currentUserStatus = statusUser.LOGGEDIN;
             sendMessageToClient("230 welcome to FTP-SERVER");
@@ -143,7 +147,7 @@ public class ServerService extends Thread{
         }
     }
 
-    private void handlerUser(String username) {
+    private void handlerUser(String username) throws IOException {
         if(username.equalsIgnoreCase(UserValid)){
             sendMessageToClient("331 User name Ok, know the password ? ");
             currentUserStatus = statusUser.ENTEREDUSERNAME;
@@ -156,8 +160,9 @@ public class ServerService extends Thread{
         }
     }
 
-    private void sendMessageToClient(String s) {
-        clientOutWriter.println(s);
+    private void sendMessageToClient(String s) throws IOException {
+        //clientOutWriter.println(s);
+        clientOut.writeBytes(s+ "\r\n");
     }
 
 
