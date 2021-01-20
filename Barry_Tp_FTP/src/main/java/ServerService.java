@@ -129,9 +129,154 @@ public class ServerService extends Thread {
         }
     }
 
-    private void handleRetr(String args) {
+    /**
+     *
+     * @param file
+     */
+    private void handleRetr(String file) {
+        File f =  new File(currDirectory + fileSeparator + file);
+
+        if(!f.exists())
+        {
+            sendMsgToClient("550 File does not exist");
+        }
+
+        else
+        {
+
+            // Binary mode
+            if (transferMode == TypeDeTransfert.BINARY)
+            {
+                BufferedOutputStream fout = null;
+                BufferedInputStream fin = null;
+
+                sendMsgToClient("150 Opening binary mode data connection for requested file " + f.getName());
+
+                try
+                {
+                    //create streams
+                    fout = new BufferedOutputStream(dataConnection.getOutputStream());
+                    fin = new BufferedInputStream(new FileInputStream(f));
+                }
+                catch (Exception e)
+                {
+                    debugOutPut("Could not create file streams");
+                }
+
+                debugOutPut("Starting file transmission of " + f.getName());
+
+                // write file with buffer
+                byte[] buf = new byte[1024];
+                int l = 0;
+                try
+                {
+                    while ((l = fin.read(buf,0,1024)) != -1)
+                    {
+                        fout.write(buf,0,l);
+                    }
+                }
+                catch (IOException e)
+                {
+                    debugOutPut("Could not read from or write to file streams");
+                    e.printStackTrace();
+                }
+
+                //close streams
+                try
+                {
+                    fin.close();
+                    fout.close();
+                } catch (IOException e)
+                {
+                    debugOutPut("Could not close file streams");
+                    e.printStackTrace();
+                }
+
+
+                debugOutPut("Completed file transmission of " + f.getName());
+
+            }
+
+            // ASCII mode
+            else
+            {
+                sendMsgToClient("150 Opening ASCII mode data connection for requested file " + f.getName());
+
+                BufferedReader rin = null;
+                PrintWriter rout = null;
+
+                try
+                {
+                    rin = new BufferedReader(new FileReader(f));
+                    rout = new PrintWriter(dataConnection.getOutputStream(),true);
+
+                }
+                catch (IOException e)
+                {
+                    debugOutPut("Could not create file streams");
+                }
+
+                String s;
+
+                try
+                {
+                    while((s = rin.readLine()) != null)
+                    {
+                        assert rout != null;
+                        rout.println(s);
+                    }
+                } catch (IOException e)
+                {
+                    debugOutPut("Could not read from or write to file streams");
+                    e.printStackTrace();
+                }
+
+                try
+                {
+                    assert rout != null;
+                    rout.close();
+                    rin.close();
+                } catch (IOException e)
+                {
+                    debugOutPut("Could not close file streams");
+                    e.printStackTrace();
+                }
+            }
+            sendMsgToClient("226 File transfer successful. Closing data connection.");
+
+        }
+        closeDataConnection();
     }
 
+    /**
+     *
+     */
+    private void closeDataConnection() {
+        try
+        {
+            dataOutWriter.close();
+            dataConnection.close();
+            if (dataSocket != null)
+            {
+                dataSocket.close();
+            }
+
+
+            debugOutPut("Data connection was closed");
+        } catch (IOException e)
+        {
+            debugOutPut("Could not close data connection");
+            e.printStackTrace();
+        }
+        dataOutWriter = null;
+        dataConnection = null;
+        dataSocket = null;
+    }
+
+    /**
+     *
+     * @param username
+     */
     private void handleUser(String username) {
         if (username.toLowerCase().equals(validUser))
         {
@@ -148,6 +293,10 @@ public class ServerService extends Thread {
         }
     }
 
+    /**
+     *
+     * @param password
+     */
     private void handlePass(String password) {
         // User has entered a valid username and password is correct
         if (currentUserStatus == StatusUser.ENTEREDUSERNAME && password.equals(validPassword))
@@ -170,6 +319,10 @@ public class ServerService extends Thread {
         }
     }
 
+    /**
+     *
+     * @param args
+     */
     private void handleCwd(String args) {
         String filename = currDirectory;
 
@@ -205,6 +358,9 @@ public class ServerService extends Thread {
         }
     }
 
+    /**
+     *
+     */
     private void handlePwd() {
         sendMsgToClient("257 \"" + currDirectory + "\"");
     }

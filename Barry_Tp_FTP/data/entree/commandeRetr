@@ -1,0 +1,16 @@
+
+    Normalement, le serveur répond avec une marque en utilisant le code de réponse 150.
+    Il cesse ensuite d'accepter de nouvelles connexions, tente d'envoyer le contenu du fichier
+    via la connexion de données et ferme la connexion de données. Enfin, il accepte la demande RETR
+     avec le code de réponse 226 si le fichier entier a été écrit avec succès dans les tampons TCP
+     du serveur, sinon il rejette la demande RETR avec le code de réponse 425 si aucune connexion
+     TCP n'a été établie; puis rejette la demande RETR avec le code de réponse 426 si la connexion
+      TCP a été établie mais ensuite interrompue par le client ou par une défaillance du réseau;
+       ou rejette la demande RETR avec le code de réponse 451 ou 551 si le serveur a eu des
+       difficultés à lire le fichier à partir du disque. Le serveur est obligé de fermer
+       la connexion de données dans chacun de ces cas. Le client n'est pas censé rechercher
+       une réponse du serveur tant qu'il ne voit pas que la connexion de données est fermée.
+    Le serveur peut rejeter la demande RETR sans d'abord répondre avec une marque. Dans ce cas,
+    le serveur ne touche pas la connexion de données. Le RFC 959 autorise le code de réponse 550
+    pour un fichier n'existant pas, le refus de l'autorisation,...,
+    et le code 450 pour le manque de mémoire, les pannes de disque,...
