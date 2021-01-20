@@ -122,11 +122,35 @@ public class ServerService extends Thread {
             case "QUIT":
                 handleQuit();
                 break;
+            case "TYPE":
+                handleType(args);
+                break;
                 
             default:
                 sendMsgToClient("501 Unknown command");
                 break;
         }
+    }
+
+    /**
+     *
+     * @param mode
+     */
+    private void handleType(String mode)
+    {
+        if(mode.toUpperCase().equals("A"))
+        {
+            transferMode = TypeDeTransfert.ASCII;
+            sendMsgToClient("200 OK");
+        }
+        else if(mode.toUpperCase().equals("I"))
+        {
+            transferMode = TypeDeTransfert.BINARY;
+            sendMsgToClient("200 OK");
+        }
+        else
+            sendMsgToClient("504 Not OK");;
+
     }
 
     /**
