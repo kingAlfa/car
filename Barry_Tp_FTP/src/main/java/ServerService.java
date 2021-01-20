@@ -2,201 +2,224 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerService extends Thread{
-    private final boolean DEBUGMODE = true;
+public class ServerService extends Thread {
 
-    //gestion des direction
+    private final boolean debugMode = true;
+
+    // Path information
     private String root;
-    private String currentDir;
-    private final String separateur = "/";
-    // gestion de connexion
-    private Socket clientSocket;
-    private PrintWriter clientOutWriter;
-    private BufferedReader clientIn;
-    private DataOutputStream clientOut;
-    //gestion des données
-    private ServerSocket dataSocket;
-    private Socket dataConnexion;
-    private PrintWriter dataOutWriter;
-    private OutputStream os;
+    private String currDirectory;
+    private String fileSeparator = "/";
 
-    //gestion de l'utilisateur
-    private StatusUser currentUserStatus = StatusUser.NOTLOGGEDION;
-    private String UserValid = "Barry";
-    private String PassWord  = "Car2021";
+
+    // control connection
+    private Socket controlSocket;
+    private PrintWriter controlOutWriter;
+    private BufferedReader controlIn;
+
+
+    // data Connection
+    private ServerSocket dataSocket;
+    private Socket dataConnection;
+    private PrintWriter dataOutWriter;
 
     private int dataPort;
-    private typeDeTransfert modeDeTransfer = typeDeTransfert.ASCII;
+    private TypeDeTransfert transferMode = TypeDeTransfert.ASCII;
+
+
+    // user properly logged in?
+    private StatusUser currentUserStatus = StatusUser.NOTLOGGEDIN;
+    private String validUser = "barry";
+    private String validPassword = "c123";
+
     private boolean quitCommandLoop = false;
 
-    public ServerService(Socket soClient, int dataPort){
+
+    public ServerService(Socket soClient, int dataPort) {
         super();
-        this.clientSocket = soClient;
+        this.controlSocket = soClient;
         this.dataPort = dataPort;
-        this.currentDir = System.getProperty("user.dir")+"/data";
+        this.currDirectory = System.getProperty("user.dir")+"/data";
         this.root = System.getProperty("user.dir");
+
     }
 
-    public  void run(){
+    public void run(){
         try{
-            clientIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            clientOut = new DataOutputStream(clientSocket.getOutputStream());
-            //clientOutWriter = new PrintWriter(clientSocket.getOutputStream(),true);
+            //Input from client
+            controlIn = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
 
-            sendMessageToClient("220 Welcome to the Barry FTP SERVER...");
-            while(!quitCommandLoop){
-                executeCommand(clientIn.readLine());
+            //output to client
+            controlOutWriter = new PrintWriter(controlSocket.getOutputStream(),true);
+
+            //Greeting
+            sendMsgToClient("220 welcome to BARRY FTP-SERVER");
+
+            //get new command from client
+            while (!quitCommandLoop){
+                executeCommand(controlIn.readLine());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         finally {
+            //clean up
             try{
-                clientIn.close();
-                clientOut.close();
-                //clientOutWriter.close();
-                clientSocket.close();
-                debugOutPut("Sockets fermée et le server arreté...");
+                controlIn.close();
+                controlOutWriter.close();
+                controlSocket.close();
+
+                debugOutPut("Sockets closed !!!");
             } catch (IOException e) {
                 e.printStackTrace();
-                debugOutPut("La socket ne peut pas être fermée...");
+                debugOutPut("Could not closed sockets !!!");
             }
         }
     }
 
+    /**
+     *
+     * @param s
+     */
     private void debugOutPut(String s) {
-        if(DEBUGMODE){
-            System.out.println("Thread "+this.getId() + ": "+s);
+        if (debugMode)
+        {
+            System.out.println("Thread " + this.getId() + ": " + s);
         }
     }
 
-    private void executeCommand(String c) throws IOException {
-        debugOutPut("LA REQUETE "+c);
+    /**
+     *
+     * @param c
+     */
+    private void executeCommand(String c) {
+        //split
         int index = c.indexOf(' ');
-        String command = ((index == -1)? c.toUpperCase(): (c.substring(0,index)).toUpperCase()).trim();
-        String args = ((index == -1)? null : c.substring(index + 1,c.length()));
-        debugOutPut("Command " +command + "  Args : "+ args);
+        String command = ((index == -1)? c.toUpperCase() : (c.substring(0, index)).toUpperCase());
+        String args = ((index == -1)? null : c.substring(index+1, c.length()));
 
+        debugOutPut("Command : "+command+ " Args : "+args);
+        switch (command){
+            case "USER":
+                assert args != null;
+                handleUser(args);
+                break;
 
-        if(command.equals("USER")){
-            assert args != null;
-            handlerUser(args);
-        }
-        else if(command.equals("PASS")){
-            handlerPass(args);
-        }
-        else if(command.equals("PWD")){
-            handlerPwd();
-        }
-        else if(command.equals("QUIT")){
-            handlerQuit();
-        }
-        else if(command.equals("CWD")){
-            assert args != null;
-            controlCwd(args);
-        }
-        else if(command.equals("RETR")){
-            handleRetr(args);
-        }
-        else{
-            sendMessageToClient("501 Command inconnue");
-        }
+            case "PASS":
+                handlePass(args);
+                break;
 
+            case "CWD":
+                assert args != null;
+                handleCwd(args);
+                break;
+            case "PWD":
+                handlePwd();
+                break;
+            case "RETR":
+                handleRetr(args);
+                break;    
+            case "QUIT":
+                handleQuit();
+                break;
+                
+            default:
+                sendMsgToClient("501 Unknown command");
+                break;
+        }
     }
 
-    private void handleRetr(String args) throws IOException {
-        File f = new File(currentDir + separateur + args);
+    private void handleRetr(String args) {
+    }
 
-        if(!f.exists()){
-            sendMessageToClient("550 File does not exist");
+    private void handleUser(String username) {
+        if (username.toLowerCase().equals(validUser))
+        {
+            sendMsgToClient("331 User name okay, need password");
+            currentUserStatus = StatusUser.ENTEREDUSERNAME;
+        }
+        else if (currentUserStatus == StatusUser.LOGGEDIN)
+        {
+            sendMsgToClient("530 User already logged in");
+        }
+        else
+        {
+            sendMsgToClient("530 Not logged in");
+        }
+    }
+
+    private void handlePass(String password) {
+        // User has entered a valid username and password is correct
+        if (currentUserStatus == StatusUser.ENTEREDUSERNAME && password.equals(validPassword))
+        {
+            currentUserStatus = StatusUser.LOGGEDIN;
+            sendMsgToClient("230-Welcome to Alpha");
+            sendMsgToClient("230 User logged in successfully");
         }
 
-        else{
-            //binary mode
-            if(modeDeTransfer == typeDeTransfert.BINARY){
-                BufferedOutputStream fout = null;
-                BufferedInputStream fIn= null;
+        // User is already logged in
+        else if (currentUserStatus == StatusUser.LOGGEDIN)
+        {
+            sendMsgToClient("530 User already logged in");
+        }
 
-                sendMessageToClient("150 Opening binary mode transfert for the file "+f.getName());
+        // Wrong password
+        else
+        {
+            sendMsgToClient("530 Not logged in");
+        }
+    }
 
-                try{
-                    //create streams
+    private void handleCwd(String args) {
+        String filename = currDirectory;
 
-                }catch (Exception e){
-                    debugOutPut("Could not create file!");
-                }
+        // go one level up (cd ..)
+
+        if (args.equals(".."))
+        {
+            int ind = filename.lastIndexOf(fileSeparator);
+            if (ind > 0)
+            {
+                filename = filename.substring(0, ind);
             }
         }
-    }
 
-    private void controlCwd(String args) throws IOException {
-        String filename = currentDir;
-
-        // cas de cwd ..
-        if(args.equals("..")){
-             int ind= filename.lastIndexOf(separateur);
-             if(ind > 0){
-                 filename = filename.substring(0,ind);
-             }
+        // if argument is anything else (cd . does nothing)
+        else
+        {
+            filename = filename + fileSeparator + args;
         }
 
-        // cas de cwd . qui ne fait rien
-        else if((args!= null ) && (!args.equals("."))){
-            filename = filename + separateur + args;
-        }
-
+        // check if file exists, is directory and is not above root directory
+        debugOutPut(">> DEBUG filename : "+filename);
         File f = new File(filename);
-        if(f.exists() && f.isDirectory() && (filename.length() >= root.length())){
-            currentDir = filename;
-            sendMessageToClient("250 The current  directory has been changed to "+ currentDir);
-            //clientOut.writeBytes("250 The current  directory has been changed to "+ currentDir );
+        debugOutPut(">> DEBUG FILE exist :"+f.exists()+"   isDir :"+f.isDirectory()+ " length :"+(f.length() >=root.length()));
+        if ((f.exists() && f.isDirectory()) && (filename.length() >= root.length()))
+        {
+            currDirectory = filename;
+            sendMsgToClient("250 The current directory has been changed to " + currDirectory);
         }
-        else{
-            sendMessageToClient("550 File unavailable");
-           // clientOut.writeBytes("550 file unavailable");
+        else
+        {
+            sendMsgToClient("550 Requested action not taken. File unavailable.");
         }
     }
 
-    private void handlerQuit() throws IOException {
-        sendMessageToClient("221 Closing connection ");
+    private void handlePwd() {
+        sendMsgToClient("257 \"" + currDirectory + "\"");
+    }
+
+    private void handleQuit() {
+        sendMsgToClient("221 Closing connection");
         quitCommandLoop = true;
     }
 
-    private void handlerPwd() throws IOException {
-        sendMessageToClient("257 \""+ currentDir + "\"");
+    /**
+     *
+     * @param s
+     */
+    private void sendMsgToClient(String s) {
+        controlOutWriter.println(s);
     }
-
-    private void handlerPass(String passWord) throws IOException {
-        if(currentUserStatus == StatusUser.ENTEREDUSERNAME && passWord.equals(PassWord)){
-            currentUserStatus = StatusUser.LOGGEDIN;
-            sendMessageToClient("230 welcome to FTP-SERVER");
-            sendMessageToClient("230 User logged well");
-        }
-        else if(currentUserStatus == StatusUser.LOGGEDIN){
-            sendMessageToClient("530 already logged");
-        }
-        else{
-            sendMessageToClient("530 not logged");
-        }
-    }
-
-    private void handlerUser(String username) throws IOException {
-        if(username.equalsIgnoreCase(UserValid)){
-            sendMessageToClient("331 User name Ok, know the password ? ");
-            currentUserStatus = StatusUser.ENTEREDUSERNAME;
-        }
-        else if(currentUserStatus == StatusUser.LOGGEDIN){
-            sendMessageToClient("550 user already logged");
-        }
-        else{
-            sendMessageToClient("530 User not logged...");
-        }
-    }
-
-    private void sendMessageToClient(String s) throws IOException {
-        //clientOutWriter.println(s);
-        clientOut.writeBytes(s+ "\r\n");
-    }
-
 
 }
