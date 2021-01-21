@@ -539,9 +539,7 @@ public class ServerService extends Thread {
         }
 
         // check if file exists, is directory and is not above root directory
-        debugOutPut(">> DEBUG filename : "+filename);
         File f = new File(filename);
-        debugOutPut(">> DEBUG FILE exist :"+f.exists()+"   isDir :"+f.isDirectory()+ " length :"+(f.length() >=root.length()));
         if ((f.exists() && f.isDirectory()) && (filename.length() >= root.length()))
         {
             currDirectory = filename;
