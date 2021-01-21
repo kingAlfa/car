@@ -125,10 +125,48 @@ public class ServerService extends Thread {
             case "TYPE":
                 handleType(args);
                 break;
+            case "PORT":
+                handlePort(args);
+                break;
                 
             default:
                 sendMsgToClient("501 Unknown command");
                 break;
+        }
+    }
+
+    /**
+     *
+     * @param args
+     */
+    private void handlePort(String args) {
+        // Extract IP address and port number from arguments
+        String[] stringSplit = args.split(",");
+        String hostName = stringSplit[0] + "." + stringSplit[1] + "." +
+                stringSplit[2] + "." + stringSplit[3];
+
+        int p = Integer.parseInt(stringSplit[4])*256 + Integer.parseInt(stringSplit[5]);
+
+        // Initiate data connection to client
+        openDataConnectionActive(hostName, p);
+        sendMsgToClient("200 Command OK");
+    }
+
+    /**
+     *
+     * @param ipAddress
+     * @param port
+     */
+    private void openDataConnectionActive(String ipAddress, int port) {
+        try
+        {
+            dataConnection = new Socket(ipAddress, port);
+            dataOutWriter = new PrintWriter(dataConnection.getOutputStream(), true);
+            debugOutPut("Data connection - Active Mode - established");
+        } catch (IOException e)
+        {
+            debugOutPut("Could not connect to client data socket");
+            e.printStackTrace();
         }
     }
 
