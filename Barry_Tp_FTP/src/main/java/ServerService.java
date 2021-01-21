@@ -128,10 +128,143 @@ public class ServerService extends Thread {
             case "PORT":
                 handlePort(args);
                 break;
+            case "STOR":
+                handleStor(args);
+                break;
                 
             default:
                 sendMsgToClient("501 Unknown command");
                 break;
+        }
+    }
+
+    /**
+     *
+     * @param file
+     */
+    private void handleStor(String file) {
+        if (file == null)
+        {
+            sendMsgToClient("501 No filename given");
+        }
+        else
+        {
+            File f =  new File(currDirectory + fileSeparator + file);
+
+            if(f.exists())
+            {
+                sendMsgToClient("550 File already exists");
+            }
+
+            else
+            {
+
+                // Binary mode
+                if (transferMode == TypeDeTransfert.BINARY)
+                {
+                    BufferedOutputStream fout = null;
+                    BufferedInputStream fin = null;
+
+                    sendMsgToClient("150 Opening binary mode data connection for requested file " + f.getName());
+
+                    try
+                    {
+                        // create streams
+                        fout = new BufferedOutputStream(new FileOutputStream(f));
+                        fin = new BufferedInputStream(dataConnection.getInputStream());
+                    }
+                    catch (Exception e)
+                    {
+                        debugOutPut("Could not create file streams");
+                    }
+
+                    debugOutPut("Start receiving file " + f.getName());
+
+                    // write file with buffer
+                    byte[] buf = new byte[1024];
+                    int l = 0;
+                    try
+                    {
+                        while (true)
+                        {
+                            assert fin != null;
+                            if ((l = fin.read(buf, 0, 1024)) == -1) break;
+                            fout.write(buf,0,l);
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        debugOutPut("Could not read from or write to file streams");
+                        e.printStackTrace();
+                    }
+
+                    //close streams
+                    try
+                    {
+                        fin.close();
+                        fout.close();
+                    } catch (IOException e)
+                    {
+                        debugOutPut("Could not close file streams");
+                        e.printStackTrace();
+                    }
+
+
+                    debugOutPut("Completed receiving file " + f.getName());
+
+                }
+
+                // ASCII mode
+                else
+                {
+                    sendMsgToClient("150 Opening ASCII mode data connection for requested file " + f.getName());
+
+                    BufferedReader rin = null;
+                    PrintWriter rout = null;
+
+                    try
+                    {
+                        rin = new BufferedReader(new InputStreamReader(dataConnection.getInputStream()));
+                        rout = new PrintWriter(new FileOutputStream(f),true);
+
+                    }
+                    catch (IOException e)
+                    {
+                        debugOutPut("Could not create file streams");
+                    }
+
+                    String s;
+
+                    try
+                    {
+                        while(true)
+                        {
+                            assert rin != null;
+                            if ((s = rin.readLine()) == null) break;
+                            assert rout != null;
+                            rout.println(s);
+                        }
+                    } catch (IOException e)
+                    {
+                        debugOutPut("Could not read from or write to file streams");
+                        e.printStackTrace();
+                    }
+
+                    try
+                    {
+                        assert rout != null;
+                        rout.close();
+                        rin.close();
+                    } catch (IOException e)
+                    {
+                        debugOutPut("Could not close file streams");
+                        e.printStackTrace();
+                    }
+                }
+                sendMsgToClient("226 File transfer successful. Closing data connection.");
+
+            }
+            closeDataConnection();
         }
     }
 
