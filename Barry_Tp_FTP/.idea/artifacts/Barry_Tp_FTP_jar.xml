@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Barry_Tp_FTP:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Barry_Tp_FTP_jar</output-path>
+    <root id="archive" name="Barry_Tp_FTP.jar">
+      <element id="module-output" name="Barry_Tp_FTP" />
+    </root>
+  </artifact>
+</component>

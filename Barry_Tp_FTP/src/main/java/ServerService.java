@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 public class ServerService extends Thread {
 
     private final boolean debugMode = true;
@@ -33,7 +34,6 @@ public class ServerService extends Thread {
     private String validPassword = "c123";
 
     private boolean quitCommandLoop = false;
-
 
     public ServerService(Socket soClient, int dataPort) {
         super();
