@@ -131,10 +131,109 @@ public class ServerService extends Thread {
             case "STOR":
                 handleStor(args);
                 break;
-                
+            case "LIST":
+                handleNlst(args);
+                break;
+            case "NLST":
+                handleNlst(args);
+                break;
+
             default:
                 sendMsgToClient("501 Unknown command");
                 break;
+        }
+    }
+
+    /**
+     * Handler for NLST (Named List) command.
+     * Lists the directory content in a short format (names only)
+     * @param args The directory to be listed
+     */
+    private void handleNlst(String args)
+    {
+        if (dataConnection == null || dataConnection.isClosed())
+        {
+            sendMsgToClient("425 No data connection was established");
+        }
+        else
+        {
+
+            String[] dirContent = nlstHelper(args);
+
+            if (dirContent == null)
+            {
+                sendMsgToClient("550 File does not exist.");
+            }
+            else
+            {
+                sendMsgToClient("125 Opening ASCII mode data connection for file list.");
+
+                for (int i = 0; i < dirContent.length; i++)
+                {
+                    sendDataMsgToClient(dirContent[i]);
+                }
+
+                sendMsgToClient("226 Transfer complete.");
+                closeDataConnection();
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Send a message to the connected client over the data connection.
+     * @param msg Message to be sent
+     */
+    private void sendDataMsgToClient(String msg)
+    {
+        if (dataConnection == null || dataConnection.isClosed())
+        {
+            sendMsgToClient("425 No data connection was established");
+            debugOutPut("Cannot send message, because no data connection is established");
+        }
+        else
+        {
+            dataOutWriter.print(msg + '\r' + '\n');
+        }
+
+    }
+    /**
+     * A helper for the NLST command. The directory name is obtained by
+     * appending "args" to the current directory
+     * @param args The directory to list
+     * @return an array containing names of files in a directory. If the given
+     * name is that of a file, then return an array containing only one element
+     * (this name). If the file or directory does not exist, return nul.
+     */
+    private String[] nlstHelper(String args)
+    {
+        // Construct the name of the directory to list.
+        String filename = currDirectory;
+        if (args != null)
+        {
+            filename = filename + fileSeparator + args;
+        }
+
+
+        // Now get a File object, and see if the name we got exists and is a
+        // directory.
+        File f = new File(filename);
+
+        if (f.exists() && f.isDirectory())
+        {
+            return f.list();
+        }
+        else if (f.exists() && f.isFile())
+        {
+            String[] allFiles = new String[1];
+            allFiles[0] = f.getName();
+            return allFiles;
+        }
+        else
+        {
+            return null;
         }
     }
 

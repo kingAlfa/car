@@ -8,7 +8,7 @@ utilisé par le client ftp en ligne de commande
 - implementer un scénario qui permet à l'utilisateur de s'authentifier en fournissant
 un login et un mot de passe
 - Implementer la commande quit pour se deconnecter
-- Implementer les commandes dir, get, put et la commande cd
+- Implementer les commandes dir, get, put, ls et la commande cd
 ### Fonctionnement du serveur
 - Lancer le serveur ftp via le fichier [Le fichier jar](out/artifacts/Barry_Tp_FTP_jar/Barry_Tp_FTP.jar) 
 avec la commande **java -jar nom_fichier.jar**
