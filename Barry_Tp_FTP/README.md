@@ -1,5 +1,5 @@
 # Serveur FTP
-##Auteur
+## Auteur
 *Barry Mamadou*
 ## But
 Il s'agit de réaliser un programme serveur Ftp. Ce serveur doit pouvoir être 
