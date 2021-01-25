@@ -25,16 +25,15 @@ public class MainServer {
             System.exit(-1);
         }
         System.out.println("Le Server FTP est ouvert sur le port :"+clientPort);
-        int noOfThreads = 0;
+
         while (serverRunning){
             try{
                 Socket client =welcomeSocket.accept();
-                int dataport = clientPort + noOfThreads +1;
 
-                ServerService s = new ServerService(client,dataport,mapUser);
+                ServerService s = new ServerService(client,mapUser);
 
                 System.out.println("New connection to the server created");
-                noOfThreads++;
+
                 s.start();
 
             } catch (IOException e) {

@@ -6,16 +6,14 @@ import java.util.HashMap;
 
 public class ServerService extends Thread {
 
-    private final boolean debugMode = true;
-
     // Path information
-    private String root;
+    private final String root;
     private String currDirectory;
-    private String fileSeparator = "/";
+    private final String fileSeparator = "/";
 
 
     // control connection
-    private Socket controlSocket;
+    private final Socket controlSocket;
     private PrintWriter controlOutWriter;
     private BufferedReader controlIn;
 
@@ -25,23 +23,23 @@ public class ServerService extends Thread {
     private Socket dataConnection;
     private PrintWriter dataOutWriter;
 
-    private int dataPort;
+
     private TypeDeTransfert transferMode = TypeDeTransfert.ASCII;
 
 
     // user properly logged in?
     private StatusUser currentUserStatus = StatusUser.NOTLOGGEDIN;
-    private String validUser = "barry";
-    private String validPassword = "c123";
-    // user map
-    private HashMap<String,String> userMap;
+    private String validUser;
 
+    // user map that will contain the user and their password
+    private final HashMap<String,String> userMap;
+
+    //This variable will determine when the server will be stopped
     private boolean quitCommandLoop = false;
 
-    public ServerService(Socket soClient, int dataPort,HashMap usermap) {
+    public ServerService(Socket soClient,HashMap<String,String> usermap) {
         super();
         this.controlSocket = soClient;
-        this.dataPort = dataPort;
         this.currDirectory = System.getProperty("user.dir")+"/data";
         this.root = System.getProperty("user.dir");
 
@@ -49,6 +47,10 @@ public class ServerService extends Thread {
 
     }
 
+    /**
+     * This methode make run the server and it's belongs to the Thread
+     *
+     */
     public void run(){
         try{
             //Input from client
@@ -83,25 +85,22 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param s
+     * Printing the thread id and command from the client
+     * @param s the command line from client
      */
     private void debugOutPut(String s) {
-        if (debugMode)
-        {
-            System.out.println("Thread " + this.getId() + ": " + s);
-        }
+        System.out.println("Thread " + this.getId() + ": " + s);
     }
 
     /**
-     *
-     * @param c
+     * Manage all the command that received from client
+     * @param c the command from client
      */
     private void executeCommand(String c) {
         //split
         int index = c.indexOf(' ');
         String command = ((index == -1)? c.toUpperCase() : (c.substring(0, index)).toUpperCase());
-        String args = ((index == -1)? null : c.substring(index+1, c.length()));
+        String args = ((index == -1)? null : c.substring(index+1));
 
         debugOutPut("Command : "+command+ " Args : "+args);
         switch (command){
@@ -118,24 +117,33 @@ public class ServerService extends Thread {
                 assert args != null;
                 handleCwd(args);
                 break;
+
             case "PWD":
                 handlePwd();
                 break;
+
             case "RETR":
                 handleRetr(args);
-                break;    
+                break;
+
             case "QUIT":
                 handleQuit();
                 break;
+
             case "TYPE":
+                assert args != null;
                 handleType(args);
                 break;
+
             case "PORT":
+                assert args != null;
                 handlePort(args);
                 break;
+
             case "STOR":
                 handleStor(args);
                 break;
+
             case "LIST":
                 handleNlst(args);
                 break;
@@ -170,9 +178,8 @@ public class ServerService extends Thread {
             {
                 sendMsgToClient("125 Opening ASCII mode data connection for file list.");
 
-                for (int i = 0; i < dirContent.length; i++)
-                {
-                    sendDataMsgToClient(dirContent[i]);
+                for (String s : dirContent) {
+                    sendDataMsgToClient(s);
                 }
 
                 sendMsgToClient("226 Transfer complete.");
@@ -240,8 +247,10 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param file
+     * Manage the command put
+     * The command put will put the given file in the current directory.
+     * This function can switch with ASCII or BINARY mode
+     * @param file the given file
      */
     private void handleStor(String file) {
         if (file == null)
@@ -283,7 +292,7 @@ public class ServerService extends Thread {
 
                     // write file with buffer
                     byte[] buf = new byte[1024];
-                    int l = 0;
+                    int l;
                     try
                     {
                         while (true)
@@ -370,8 +379,8 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param args
+     * Extract the IP address and port number from arguments that's given by client
+     * @param args given argument
      */
     private void handlePort(String args) {
         // Extract IP address and port number from arguments
@@ -387,11 +396,12 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param ipAddress
-     * @param port
+     * Create the connection with active mode to allow transferring data
+     * @param ipAddress the given IP address
+     * @param port the given port
      */
-    private void openDataConnectionActive(String ipAddress, int port) {
+    private void openDataConnectionActive(String ipAddress, int port)
+    {
         try
         {
             dataConnection = new Socket(ipAddress, port);
@@ -405,31 +415,32 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param mode
+     * Switch the transferring mode between ASCII or BINARY mode
+     * @param mode the transferring mode
      */
     private void handleType(String mode)
     {
-        if(mode.toUpperCase().equals("A"))
+        if(mode.equalsIgnoreCase("A"))
         {
             transferMode = TypeDeTransfert.ASCII;
             sendMsgToClient("200 OK");
         }
-        else if(mode.toUpperCase().equals("I"))
+        else if(mode.equalsIgnoreCase("I"))
         {
             transferMode = TypeDeTransfert.BINARY;
             sendMsgToClient("200 OK");
         }
         else
-            sendMsgToClient("504 Not OK");;
+            sendMsgToClient("504 Not OK");
 
     }
 
     /**
-     *
-     * @param file
+     * Manage the get command
+     * @param file the given file
      */
-    private void handleRetr(String file) {
+    private void handleRetr(String file)
+    {
         File f =  new File(currDirectory + fileSeparator + file);
 
         if(!f.exists())
@@ -463,11 +474,13 @@ public class ServerService extends Thread {
 
                 // write file with buffer
                 byte[] buf = new byte[1024];
-                int l = 0;
+                int l ;
                 try
                 {
-                    while ((l = fin.read(buf,0,1024)) != -1)
+                    while (true)
                     {
+                        assert fin != null;
+                        if ((l = fin.read(buf, 0, 1024)) == -1) break;
                         fout.write(buf,0,l);
                     }
                 }
@@ -516,8 +529,10 @@ public class ServerService extends Thread {
 
                 try
                 {
-                    while((s = rin.readLine()) != null)
+                    while(true)
                     {
+                        assert rin != null;
+                        if ((s = rin.readLine()) == null) break;
                         assert rout != null;
                         rout.println(s);
                     }
@@ -545,9 +560,10 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
+     * Close the connexion when the transfer is finished
      */
-    private void closeDataConnection() {
+    private void closeDataConnection()
+    {
         try
         {
             dataOutWriter.close();
@@ -570,10 +586,12 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param username
+     * Manage the command user
+     * User name must be contained in the user Map
+     * @param username the user name
      */
-    private void handleUser(String username) {
+    private void handleUser(String username)
+    {
         if (userMap.containsKey(username))
         {
             sendMsgToClient("331 User name okay, need password");
@@ -591,14 +609,16 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param password
+     * Manage user password
+     * The user name must be in user map
+     * @param password the password of the current user
      */
-    private void handlePass(String password) {
+    private void handlePass(String password)
+    {
         // User has entered a valid username and password is correct
         String pass = userMap.get(validUser);
 
-        if (currentUserStatus == StatusUser.ENTEREDUSERNAME && password.equals(pass) && pass != null)
+        if (currentUserStatus == StatusUser.ENTEREDUSERNAME && password.equals(pass))
         {
             currentUserStatus = StatusUser.LOGGEDIN;
             sendMsgToClient("230-Welcome to Alpha");
@@ -619,10 +639,11 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
-     * @param args
+     * Change the working directory
+     * @param args the new directory
      */
-    private void handleCwd(String args) {
+    private void handleCwd(String args)
+    {
         String filename = currDirectory;
 
         // go one level up (cd ..)
@@ -656,20 +677,25 @@ public class ServerService extends Thread {
     }
 
     /**
-     *
+     * Print working directory
      */
-    private void handlePwd() {
+    private void handlePwd()
+    {
         sendMsgToClient("257 \"" + currDirectory + "\"");
     }
 
-    private void handleQuit() {
+    /**
+     * Close the server and exit
+     */
+    private void handleQuit()
+    {
         sendMsgToClient("221 Closing connection");
         quitCommandLoop = true;
     }
 
     /**
-     *
-     * @param s
+     * Print the message to the client from the server
+     * @param s response message
      */
     private void sendMsgToClient(String s) {
         controlOutWriter.println(s);
