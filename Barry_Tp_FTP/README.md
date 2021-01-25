@@ -1,5 +1,5 @@
-# Serveur FTP
-## Autor
+# Server FTP
+## Author
 *Barry Mamadou*
 ## Goal
 It is a question of carrying out a program server Ftp. This server must be able to be 

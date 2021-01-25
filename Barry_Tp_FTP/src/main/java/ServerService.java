@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 
 public class ServerService extends Thread {
@@ -32,15 +33,19 @@ public class ServerService extends Thread {
     private StatusUser currentUserStatus = StatusUser.NOTLOGGEDIN;
     private String validUser = "barry";
     private String validPassword = "c123";
+    // user map
+    private HashMap<String,String> userMap;
 
     private boolean quitCommandLoop = false;
 
-    public ServerService(Socket soClient, int dataPort) {
+    public ServerService(Socket soClient, int dataPort,HashMap usermap) {
         super();
         this.controlSocket = soClient;
         this.dataPort = dataPort;
         this.currDirectory = System.getProperty("user.dir")+"/data";
         this.root = System.getProperty("user.dir");
+
+        this.userMap= usermap;
 
     }
 
@@ -569,10 +574,11 @@ public class ServerService extends Thread {
      * @param username
      */
     private void handleUser(String username) {
-        if (username.toLowerCase().equals(validUser))
+        if (userMap.containsKey(username))
         {
             sendMsgToClient("331 User name okay, need password");
             currentUserStatus = StatusUser.ENTEREDUSERNAME;
+            validUser = username;
         }
         else if (currentUserStatus == StatusUser.LOGGEDIN)
         {
@@ -590,7 +596,9 @@ public class ServerService extends Thread {
      */
     private void handlePass(String password) {
         // User has entered a valid username and password is correct
-        if (currentUserStatus == StatusUser.ENTEREDUSERNAME && password.equals(validPassword))
+        String pass = userMap.get(validUser);
+
+        if (currentUserStatus == StatusUser.ENTEREDUSERNAME && password.equals(pass) && pass != null)
         {
             currentUserStatus = StatusUser.LOGGEDIN;
             sendMsgToClient("230-Welcome to Alpha");
