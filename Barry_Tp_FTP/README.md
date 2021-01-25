@@ -1,20 +1,19 @@
 # Serveur FTP
-## Auteur
+## Autor
 *Barry Mamadou*
-## But
-Il s'agit de réaliser un programme serveur Ftp. Ce serveur doit pouvoir être 
-utilisé par le client ftp en ligne de commande
-### Travail à réaliser
-- implementer un scénario qui permet à l'utilisateur de s'authentifier en fournissant
-un login et un mot de passe
-- Implementer la commande quit pour se deconnecter
-- Implementer les commandes dir, get, put, ls et la commande cd
-### Fonctionnement du serveur
-- Lancer le serveur ftp via le fichier [Le fichier jar](out/artifacts/Barry_Tp_FTP_jar/Barry_Tp_FTP.jar) 
-avec la commande **java -jar nom_fichier.jar**
-- Depuis le terminal lancer le client ftp sur localhost et le numero du port donné par le serveur
-- Ainsi vous pouvez utiliser les commandes disponibles sur le serveur
+## Goal
+It is a question of carrying out a program server Ftp. This server must be able to be 
+used by the command line ftp client
+### Work to be done
+- implement a scenario that allows the user to authenticate by providing a login and a password
+- Implement the QUIT command to disconnect
+- Implement the commands dir, get, put, ls and cd
+### Running The server
+- Start the ftp server via the file [The jar file](out/artifacts/Barry_Tp_FTP_jar/Barry_Tp_FTP.jar) 
+with the command **java -jar name_file.jar**
+- From the terminal launch the ftp client on localhost, and the port number given by the server
+- So you can use the commands available on the server
 ### Extension
-Pour ajouter une commande, il s'agit de specifier dans la methode executeCommand le nom de la commande 
-et ensuite d'implementer la methode qui gère cette commande. Une solution plus objet est d'implementer le 
-design pattern COMMAND. Dans ce cas on pourrait etendre l'application plus facilement. 
+To add a command, it is a question of specifying in the method executeCommand the name of the 
+command and then of implementing the method which manages this command. A more objective solution 
+is to implement the COMMAND design pattern. In this case we could extend the application more easily. 
