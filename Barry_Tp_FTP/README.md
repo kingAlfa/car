@@ -16,4 +16,5 @@ avec la commande **java -jar nom_fichier.jar**
 - Ainsi vous pouvez utiliser les commandes disponibles sur le serveur
 ### Extension
 Pour ajouter une commande, il s'agit de specifier dans la methode executeCommand le nom de la commande 
-et ensuite d'implementer la methode qui gère cette commande.
+et ensuite d'implementer la methode qui gère cette commande. Une solution plus objet est d'implementer le 
+design pattern COMMAND. Dans ce cas on pourrait etendre l'application plus facilement. 
