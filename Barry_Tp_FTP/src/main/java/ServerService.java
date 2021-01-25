@@ -134,9 +134,6 @@ public class ServerService extends Thread {
             case "LIST":
                 handleNlst(args);
                 break;
-            case "NLST":
-                handleNlst(args);
-                break;
 
             default:
                 sendMsgToClient("501 Unknown command");
