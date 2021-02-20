@@ -41,7 +41,7 @@ implements ApplicationListener<ApplicationContextEvent>
 	}
 	
 	// TODO: expose an EntityManagerFactory
-	@Bean(name = "EntityManagerFactory")
+	@Bean(name = "entityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean emf() {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
 		emf.setPersistenceUnitName("myApp");

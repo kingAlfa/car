@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<h1>Les produits ${message }</h1>
+	<h1>Les produits ${produit }</h1>
 	
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">

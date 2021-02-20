@@ -13,8 +13,7 @@ public interface ProductRepository  extends Repository<Products, Integer>{
 	//Search by the product id
 	Products findById(Integer id);
 	
-	//Get All the products
-	Page<Products> findAll(PageRequest request);
+
 	
 
 }
