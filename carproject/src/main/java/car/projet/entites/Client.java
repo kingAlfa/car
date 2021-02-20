@@ -32,6 +32,8 @@ public class Client
 		//Gerer la date
 	}
 	
+	public Client() {}
+	
 	public int getId_client() {
 		return id;
 	}

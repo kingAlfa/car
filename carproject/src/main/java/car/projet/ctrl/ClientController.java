@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import car.projet.dao.ProductRepository;
 import car.projet.entites.Products;
@@ -14,13 +15,13 @@ import car.projet.entites.Products;
 
 
 @Controller
-public class ClientController 
-
-{	
-	@Autowired
-	ProductRepository dao;
+public class ClientController {	
 	
-	@GetMapping(path = "/produit/{id}")
+	
+	@Autowired
+	private ProductRepository dao;
+	
+	@RequestMapping(path = "/produit/{id}")
 	public String client(Model  model,@PathVariable int id) {
 		Products products = dao.findById(id);
 		

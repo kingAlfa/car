@@ -3,7 +3,7 @@ package car.projet.dao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.Repository;
-
+import org.springframework.stereotype.Component;
 
 import car.projet.entites.Products;
 

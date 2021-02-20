@@ -1,5 +1,9 @@
 package car.projet;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,6 +12,8 @@ public class CarprojectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarprojectApplication.class, args);
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("myApp");
+		EntityManager em = emf.createEntityManager();
 	}
 
 }

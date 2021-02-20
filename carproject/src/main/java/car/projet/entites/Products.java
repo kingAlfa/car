@@ -34,6 +34,7 @@ public class Products
 		this.prix=prix;
 		this.urlPhoto=urlPhoto;
 	}
+	public Products() {}
 	
 	
 	public int getId_prod() {

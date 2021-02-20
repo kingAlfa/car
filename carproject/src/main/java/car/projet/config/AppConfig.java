@@ -1,5 +1,9 @@
 package car.projet.config;
 
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import javax.persistence.EntityManagerFactory;
 
 import org.slf4j.Logger;
@@ -11,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jca.support.LocalConnectionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -61,5 +64,13 @@ implements ApplicationListener<ApplicationContextEvent>
 		log.info("Stop EntityManagerFactory.");
 		EntityManagerFactory emf = event.getApplicationContext().getBean(EntityManagerFactory.class);
 		emf.close();
+		
+		log.info("Unregister H2 JDBC Driver.");
+		try {
+			Driver driver = DriverManager.getDriver("jdbc:h2:~/eclipse-workspace/carproject/target/db");
+			DriverManager.deregisterDriver(driver);
+		} catch( SQLException e ) {
+			log.info("Unable to unregister driver.", e);
+		}
 	}
 }
