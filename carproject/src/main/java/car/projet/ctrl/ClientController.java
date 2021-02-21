@@ -23,8 +23,8 @@ public class ClientController {
 	
 	@RequestMapping(path = "/produit/{id}")
 	public String client(Model  model,@PathVariable int id) {
-		Products products = dao.findById(id);
-		String mess = "Field dao in car.projet.ctrl.ClientController required a bean named 'entityManagerFactory' that could not be found. ";
+		//Products products = dao.findById(id);
+		String mess = "Le code marche mais les tables ne sont pas creer dans la base de donees";
 		model.addAttribute("produit",mess);
 		return "product";
 	}
