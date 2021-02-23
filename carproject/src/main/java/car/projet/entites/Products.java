@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Produit")
+@Table(name="Products")
 public class Products 
 {	
 	@Id
@@ -37,10 +37,10 @@ public class Products
 	public Products() {}
 	
 	
-	public int getId_prod() {
+	public int getId() {
 		return id;
 	}
-	public void setId_prod(int id_prod) {
+	public void setId(int id_prod) {
 		this.id = id_prod;
 	}
 	public String getCategorie() {

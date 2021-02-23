@@ -1,13 +1,19 @@
-DROP TABLE IF EXISTS billionaires;
-
-CREATE TABLE billionaires (
-  id INT AUTO_INCREMENT  PRIMARY KEY,
-  first_name VARCHAR(250) NOT NULL,
-  last_name VARCHAR(250) NOT NULL,
-  career VARCHAR(250) DEFAULT NULL
-);
-
-INSERT INTO billionaires (first_name, last_name, career) VALUES
-  ('Aliko', 'Dangote', 'Billionaire Industrialist'),
-  ('Bill', 'Gates', 'Billionaire Tech Entrepreneur'),
-  ('Folrunsho', 'Alakija', 'Billionaire Oil Magnate');
+Drop table Products if exists ;
+Create table Products(
+  id INTEGER   PRIMARY KEY,
+  categorie VARCHAR(50) ,
+  nom VARCHAR(30),
+  Description VARCHAR(100),
+  marque VARCHAR(30),
+  url_photo VARCHAR(250),
+  prix numeric,
+  date_publi Date
+) ;
+insert into Products values(1,
+							'informatique',
+							'Dell E1232',
+							'Ici la description',
+							'Dell',
+							'/images/merci.gif'
+							,23,
+							'2021-02-23') ;

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<h1>Les produits ${produit }</h1>
+	<h1>Les produits ${products.description } ...</h1>
 	
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -39,7 +39,25 @@
   </ul>
 </nav>
 
-
+<table class="table table-bordered table-striped table-hover">
+	<tr>
+		<th>Photo</th>
+		<th>Nom </th>
+		<th>Prix</th>
+		<th>description</th>
+		<th>date</th>
+	</tr>
+	
+		<tr>
+			<td>Photo </td>
+			<td>Ommoton</td>
+			<td>10</td>
+			<td>Omoton avec son clavier et sa souris</td>
+			<td>Aujourdh'hui a 23:49</td>
+			
+		</tr>
+	
+</table>
 
 </body>
 </html>
