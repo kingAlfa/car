@@ -23,8 +23,16 @@ public class ClientController {
 	@Autowired
 	private ProductRepository dao;
 	
+	
+	
+	
 	@RequestMapping(path = "/produit/{id}")
 	public String client(Model  model,@PathVariable int id) {
+
+		//Creation d'un produit et enregistrement
+		Products prod = new Products("Cate 2","Dell","Libelle Dell ","Ordinateur puissant","Dell","...",2.3);
+		dao.save(prod);
+		
 		Products products = dao.findById(id);
 		String mess = "Test du dao";
 		
