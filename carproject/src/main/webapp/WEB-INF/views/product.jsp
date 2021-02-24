@@ -49,11 +49,11 @@
 	</tr>
 	
 		<tr>
-			<td>Photo </td>
-			<td>Ommoton</td>
-			<td>10</td>
-			<td>Omoton avec son clavier et sa souris</td>
-			<td>Aujourdh'hui a 23:49</td>
+			<td>${products.url_photo } </td>
+			<td>${products.nom }</td>
+			<td>${products.prix }</td>
+			<td>${products.description }</td>
+			<td>${products.date_publi }</td>
 			
 		</tr>
 	
