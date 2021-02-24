@@ -14,7 +14,7 @@
 
 <body>
 	<h1>Les produits ${mess } ...</h1>
-	<p>La valeur du dao : ${products.getId } </p>
+	<p>La valeur du dao : ${products.id } </p>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
@@ -49,11 +49,11 @@
 	</tr>
 	
 		<tr>
-			<td>${products.url_photo } </td>
-			<td>${products.nom }</td>
-			<td>${products.prix }</td>
+			<td>${products.urlPhoto } </td>
+			<td>${products.nom_prod}</td>
+			<td>${products.prix}</td>
 			<td>${products.description }</td>
-			<td>${products.date_publi }</td>
+			<td>${products.date_pub }</td>
 			
 		</tr>
 	
