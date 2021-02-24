@@ -26,10 +26,11 @@ public class ClientController {
 	@RequestMapping(path = "/produit/{id}")
 	public String client(Model  model,@PathVariable int id) {
 		Products products = dao.findById(id);
-		String mess = "Le code marche mais les tables ne sont pas creer dans la base de donees";
+		String mess = "Test du dao";
 		
 		model.addAttribute("products",products);
-		//System.out.println(">>>> test produit ::: "+products.getDescription().isEmpty());
+		model.addAttribute("mess",mess);
+		
 		return "product";
 	}
 

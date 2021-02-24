@@ -13,8 +13,8 @@
 </head>
 
 <body>
-	<h1>Les produits ${products.description } ...</h1>
-	
+	<h1>Les produits ${mess } ...</h1>
+	<p>La valeur du dao : ${products.getId } </p>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
