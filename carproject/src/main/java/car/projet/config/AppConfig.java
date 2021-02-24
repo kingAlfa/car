@@ -67,7 +67,7 @@ implements ApplicationListener<ApplicationContextEvent>
 		
 		log.info("Unregister H2 JDBC Driver.");
 		try {
-			Driver driver = DriverManager.getDriver("jdbc:h2:~/eclipse-workspace/carproject/target/db");
+			Driver driver = DriverManager.getDriver("jdbc:h2:~/Documents/MI_MIAGE/S2/CAR/car/carproject/target/db");
 			DriverManager.deregisterDriver(driver);
 		} catch( SQLException e ) {
 			log.info("Unable to unregister driver.", e);

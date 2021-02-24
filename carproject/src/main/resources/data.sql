@@ -16,4 +16,4 @@ insert into Products values(1,
 							'Dell',
 							'/images/merci.gif'
 							,23,
-							'2021-02-23') ;
+							'2021-02-24') ;
