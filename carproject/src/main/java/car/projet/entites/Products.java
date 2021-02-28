@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Products")
+//@Table(name="Products")
 public class Products 
 {	
 	@Id
@@ -24,7 +24,7 @@ public class Products
 	private double prix;
 	private boolean disponible;
 	private Date date_pub;
-	
+	/*
 	public Products(String cate,String nom,String lib,String desc,String marq,String urlPhoto,double prix) {
 		this.categorie=cate;
 		this.nom_prod = nom;
@@ -36,7 +36,7 @@ public class Products
 	}
 	public Products() {}
 	
-	
+	*/
 	public int getId() {
 		return id;
 	}

@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Products</title>
+  <title>one-product</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -13,8 +14,8 @@
 </head>
 
 <body>
-	<h1>Les produits ${mess } ...</h1>
-	<p>La valeur du dao : ${products.id } </p>
+	<h1>Nom Produit  ${products.nom_prod} ...</h1>
+
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
@@ -47,7 +48,7 @@
 		<th>description</th>
 		<th>date</th>
 	</tr>
-	
+
 		<tr>
 			<td>${products.urlPhoto } </td>
 			<td>${products.nom_prod}</td>
@@ -56,7 +57,7 @@
 			<td>${products.date_pub }</td>
 			
 		</tr>
-	
+
 </table>
 
 </body>

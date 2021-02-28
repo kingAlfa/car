@@ -2,18 +2,25 @@ package car.projet.ctrl;
 
 
 import java.awt.desktop.SystemEventListener;
+import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import car.projet.dao.ProductRepository;
 import car.projet.entites.Products;
+import org.springframework.web.context.support.ServletContextResource;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -22,24 +29,37 @@ public class ClientController {
 	
 	@Autowired
 	private ProductRepository dao;
-	
-	
-	
-	
+
+
+
 	@RequestMapping(path = "/produit/{id}")
 	public String client(Model  model,@PathVariable int id) {
 
 		//Creation d'un produit et enregistrement
-		Products prod = new Products("Cate 2","Dell","Libelle Dell ","Ordinateur puissant","Dell","...",2.3);
-		dao.save(prod);
+		//Products prod = new Products("Cate 2","Dell","Libelle Dell ","Ordinateur puissant","Dell","...",2.3);
+		//dao.save(prod);
 		
 		Products products = dao.findById(id);
-		String mess = "Test du dao";
+
 		
 		model.addAttribute("products",products);
-		model.addAttribute("mess",mess);
+
 		
 		return "product";
+	}
+
+	@RequestMapping("/list")
+	public String list(Model model){
+		int page = 1;
+		int size = 50;
+		page--;
+		PageRequest pagerequest = PageRequest.of(page, size);
+		List<Products> list = (List<Products>) dao.findAll();
+
+		model.addAttribute("list",list);
+
+		return "list-produit";
+
 	}
 
 }
