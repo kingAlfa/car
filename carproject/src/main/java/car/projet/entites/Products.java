@@ -26,6 +26,10 @@ public class Products
 	@OneToOne(mappedBy = "products", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private Stock stock;
+
+	@OneToOne(mappedBy = "prodcuts",cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	private Panier panier;
 	/*
 	public Products(String cate,String nom,String lib,String desc,String marq,String urlPhoto,double prix) {
 		this.categorie=cate;
