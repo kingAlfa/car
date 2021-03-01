@@ -5,6 +5,7 @@ import java.awt.desktop.SystemEventListener;
 import java.io.IOException;
 import java.util.List;
 
+import car.projet.entites.UseData;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.io.Resource;
@@ -19,13 +20,17 @@ import car.projet.dao.ProductRepository;
 import car.projet.entites.Products;
 import org.springframework.web.context.support.ServletContextResource;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 
 @Controller
-public class ClientController {	
-	
+public class ClientController {
+	@PersistenceUnit
+	private EntityManagerFactory emf;
 	
 	@Autowired
 	private ProductRepository dao;
@@ -38,22 +43,15 @@ public class ClientController {
 		//Creation d'un produit et enregistrement
 		//Products prod = new Products("Cate 2","Dell","Libelle Dell ","Ordinateur puissant","Dell","...",2.3);
 		//dao.save(prod);
-		
 		Products products = dao.findById(id);
-
-		
 		model.addAttribute("products",products);
-
-		
 		return "product";
 	}
 
 	@RequestMapping("/list")
 	public String list(Model model){
-		int page = 1;
-		int size = 50;
-		page--;
-		PageRequest pagerequest = PageRequest.of(page, size);
+		//UseData use = new UseData();
+		//List<Products> l = use.getAllInStock();
 		List<Products> list = (List<Products>) dao.findAll();
 
 		model.addAttribute("list",list);

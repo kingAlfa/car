@@ -2,11 +2,7 @@ package car.projet.entites;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 //@Table(name="Products")
@@ -14,7 +10,9 @@ public class Products
 {	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "id")
 	private int id;
+
 	private String categorie;
 	private String nom_prod;
 	private String libelle;
@@ -24,6 +22,10 @@ public class Products
 	private double prix;
 	private boolean disponible;
 	private Date date_pub;
+
+	@OneToOne(mappedBy = "products", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	private Stock stock;
 	/*
 	public Products(String cate,String nom,String lib,String desc,String marq,String urlPhoto,double prix) {
 		this.categorie=cate;
