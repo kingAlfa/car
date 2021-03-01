@@ -27,7 +27,7 @@ public class Products
 	@PrimaryKeyJoinColumn
 	private Stock stock;
 
-	@OneToOne(mappedBy = "prodcuts",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private Panier panier;
 	/*

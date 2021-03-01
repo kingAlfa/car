@@ -18,6 +18,7 @@ public interface ProductRepository  extends CrudRepository<Products, Integer>{
 	//Search by the product id
 	
 	Products findById(int id);
+
 	@Query("select p.id from Products p join Stock s on s.id = p.id where s.quantite >0 ")
 	List<String> selectProductsInStock();
 

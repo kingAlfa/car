@@ -18,18 +18,22 @@ public class Panier
     @OneToOne
     @MapsId
     @JoinColumn(name="id")
-    Products products;
+    private Products product;
 
-    public Panier(){}
-    public Panier(int id,int quantite){
-        this.id=id;
-        this.quantite = quantite;
-    }
+
 
     public int getQuantite() {
         return quantite;
     }
     public void setQuantite(int quantite) {
         this.quantite = quantite;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }
