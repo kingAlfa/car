@@ -1,30 +1,20 @@
 package car.projet.ctrl;
 
 
-import java.awt.desktop.SystemEventListener;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import car.projet.entites.UseData;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import car.projet.dao.ProductRepository;
 import car.projet.entites.Products;
-import org.springframework.web.context.support.ServletContextResource;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -50,11 +40,21 @@ public class ClientController {
 
 	@RequestMapping("/list")
 	public String list(Model model){
-		//UseData use = new UseData();
-		//List<Products> l = use.getAllInStock();
-		List<Products> list = (List<Products>) dao.findAll();
+		//la liste des id des produits avec une quantite superieur à 0
+		List<String> inStock = dao.selectProductsInStock();
 
-		model.addAttribute("list",list);
+		//La list de tous les produits dont la quantite est superieur à 0
+		List<Products> allProd = new ArrayList<>();
+		int taille = inStock.size();
+		for (int j=0;j< taille;j++)
+		{
+			allProd.add(dao.findById(Integer.parseInt(inStock.get(j))));
+		}
+
+		//List<Products> list = (List<Products>) dao.findAll();
+
+		model.addAttribute("list",allProd);
+
 
 		return "list-produit";
 

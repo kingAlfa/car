@@ -39,6 +39,7 @@
     </ul>
 </nav>
 
+
 <table class="table table-bordered table-striped table-hover">
     <tr>
         <th>Photo</th>
@@ -58,6 +59,7 @@
         </tr>
     </c:forEach>
 </table>
+
 
 </body>
 </html>

@@ -7,7 +7,7 @@ public class Stock
 {
 
     @Id
-    @Column(name="product_id")
+    @Column(name="id")
     private int id;
 
     /**
@@ -17,7 +17,7 @@ public class Stock
 
     @OneToOne
     @MapsId
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="id")
     private Products products ;
 
     public void setQuantite(int quantite) {
