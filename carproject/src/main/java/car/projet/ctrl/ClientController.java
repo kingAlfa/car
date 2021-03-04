@@ -1,11 +1,16 @@
 package car.projet.ctrl;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import car.projet.dao.PanierRepository;
+import car.projet.entites.Panier;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +20,7 @@ import car.projet.entites.Products;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -24,6 +30,8 @@ public class ClientController {
 	
 	@Autowired
 	private ProductRepository dao;
+	@Autowired
+	PanierRepository panierDao ;
 
 
 
@@ -55,9 +63,39 @@ public class ClientController {
 
 		model.addAttribute("list",allProd);
 
-
 		return "list-produit";
 
+	}
+
+	@RequestMapping(path = "/ajouterPanier/{id}",method = RequestMethod.POST)
+	public String ajoutPanier(Model model, @PathVariable int id){
+
+		try{
+
+			Optional<Panier> eltPanier = panierDao.findById(id);
+			Panier elt = eltPanier.get();
+			elt.updateQuantite(1);
+			panierDao.save(elt);
+			model.addAttribute("panier",elt);
+
+		} catch (Exception e) {
+
+			Panier panier = new Panier(dao.findById(id).getId(),1);
+			Products prod = dao.findById(id);
+			//panier.setId(prod.getId());
+			//panier.setQuantite(1);
+			//System.out.println(">>>"+panier.getId());
+
+			//prod.setPanier(panier);
+			panier.setProduct(prod);
+			//dao.save(prod);
+			panierDao.save(panier);
+			model.addAttribute("panier",panier);
+			//e.printStackTrace();
+		}
+		model.addAttribute("quantity",id);
+
+		return "panier";
 	}
 
 }

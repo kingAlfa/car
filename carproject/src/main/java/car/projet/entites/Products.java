@@ -1,5 +1,8 @@
 package car.projet.entites;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import java.util.Date;
 
 import javax.persistence.*;
@@ -27,8 +30,11 @@ public class Products
 	@PrimaryKeyJoinColumn
 	private Stock stock;
 
+
+
 	@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Panier panier;
 	/*
 	public Products(String cate,String nom,String lib,String desc,String marq,String urlPhoto,double prix) {
@@ -40,9 +46,15 @@ public class Products
 		this.prix=prix;
 		this.urlPhoto=urlPhoto;
 	}
+
+	 */
 	public Products() {}
 	
-	*/
+
+	public void setPanier(Panier panier) {
+		this.panier = panier;
+	}
+
 	public int getId() {
 		return id;
 	}

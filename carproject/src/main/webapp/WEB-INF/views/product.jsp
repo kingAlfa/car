@@ -40,7 +40,7 @@
   </ul>
 </nav>
 
-    
+
 
 <table class="table table-bordered table-striped table-hover">
 	<tr>
@@ -59,8 +59,13 @@
 			<td>${products.date_pub }</td>
 			
 		</tr>
+    </table>
+    <form  id="addPanier" action="${pageContext.request.contextPath}/ajouterPanier/${products.id}" method="post">
+        <input name="qte" type="number" value="1">
+        <button type="submit"> Ajouter au panier</button>
+        </form>
 
-</table>
+
 
 </body>
 </html>
