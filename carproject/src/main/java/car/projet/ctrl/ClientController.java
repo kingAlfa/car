@@ -31,8 +31,7 @@ public class ClientController {
 	@Autowired
 	private ProductRepository dao;
 	@Autowired
-	PanierRepository panierDao ;
-
+	private PanierRepository panierDao ;
 
 
 	@RequestMapping(path = "/produit/{id}")
@@ -43,6 +42,8 @@ public class ClientController {
 		//dao.save(prod);
 		Products products = dao.findById(id);
 		model.addAttribute("products",products);
+		int total = panierDao.totalQuantityStock();
+		model.addAttribute("total",total);
 		return "product";
 	}
 
@@ -60,6 +61,8 @@ public class ClientController {
 		}
 
 		//List<Products> list = (List<Products>) dao.findAll();
+		int total = panierDao.totalQuantityStock();
+		model.addAttribute("total",total);
 
 		model.addAttribute("list",allProd);
 
@@ -82,20 +85,17 @@ public class ClientController {
 
 			Panier panier = new Panier(dao.findById(id).getId(),1);
 			Products prod = dao.findById(id);
-			//panier.setId(prod.getId());
-			//panier.setQuantite(1);
-			//System.out.println(">>>"+panier.getId());
-
-			//prod.setPanier(panier);
-			panier.setProduct(prod);
-			//dao.save(prod);
+			//panier.setProduct(prod);
 			panierDao.save(panier);
 			model.addAttribute("panier",panier);
 			//e.printStackTrace();
 		}
-		model.addAttribute("quantity",id);
+		int total = panierDao.totalQuantityStock();
+		model.addAttribute("total",total);
 
-		return "panier";
+
+		//return "panier";
+		return "product";
 	}
 
 }

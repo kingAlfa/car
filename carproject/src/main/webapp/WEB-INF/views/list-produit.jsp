@@ -34,7 +34,7 @@
             <a class="nav-link" href="#">Mon Compte</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Mon Panier</a>
+            <a class="nav-link" href="#">Mon Panier: ${total}</a>
         </li>
     </ul>
 </nav>

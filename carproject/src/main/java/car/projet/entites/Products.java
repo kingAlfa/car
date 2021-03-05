@@ -32,10 +32,10 @@ public class Products
 
 
 
-	@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Panier panier;
+	//@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
+	//@PrimaryKeyJoinColumn
+	//@NotFound(action = NotFoundAction.IGNORE)
+	//private Panier panier;
 	/*
 	public Products(String cate,String nom,String lib,String desc,String marq,String urlPhoto,double prix) {
 		this.categorie=cate;
@@ -51,9 +51,9 @@ public class Products
 	public Products() {}
 	
 
-	public void setPanier(Panier panier) {
-		this.panier = panier;
-	}
+	//public void setPanier(Panier panier) {
+	//	this.panier = panier;
+	//}
 
 	public int getId() {
 		return id;

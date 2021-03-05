@@ -7,7 +7,7 @@ public class Stock
 {
 
     @Id
-    @Column(name="id")
+    //@Column(name="id")
     private int id;
 
     /**

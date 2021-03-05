@@ -15,17 +15,17 @@ public class Panier
      */
     private int quantite;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="id")
-    private Products product;
+   // @OneToOne
+   // @MapsId
+   // @JoinColumn(name="id")
+   // private Products product;
 
     public Panier(){}
     public Panier(int id,int quantite ){
         this.id=id;
         this.quantite=quantite;
     }
-    public void setProduct(Products products){this.product=products;}
+   // public void setProduct(Products products){this.product=products;}
     public int getQuantite() {
         return quantite;
     }

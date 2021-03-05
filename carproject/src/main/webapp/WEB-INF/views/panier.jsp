@@ -16,8 +16,7 @@
 <body>
     <p>Votre panier ici</p>
     <p>Panier id : ${panier.id}</p>
-    <p>Panier id : ${panier.quantite}</p>
+    <p>Panier quantite : ${panier.quantite}</p>
 
-    <p>Quantity = ${quantity}</p>
 </body>
 </html>
