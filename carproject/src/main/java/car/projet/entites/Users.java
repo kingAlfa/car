@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 public class Users
@@ -80,8 +81,10 @@ public class Users
     }
 
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        int idjust = dateTime.getMinute() + dateTime.getSecond();
+        this.id = idjust;
     }
 
 

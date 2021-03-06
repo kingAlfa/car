@@ -1,11 +1,12 @@
 package car.projet.ctrl;
 
-import car.projet.dao.UserDao;
+
 import car.projet.dao.UserDaoImp;
 import car.projet.entites.Login;
 import car.projet.entites.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,21 +30,15 @@ public class LoginController
 
 
     @RequestMapping(value = "/loginProcess",method = RequestMethod.POST)
-    public String loginProcess(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("login") Login login){
-       // ModelAndView mv = null;
+    public String loginProcess(Model model, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("login") Login login){
         String path ="";
-       // UserDao userdao = new UserDaoImp();
         Users user = userDaoImp.validateUser(login);
         if (user != null){
             path="redirect:/list";
-           // mv = new ModelAndView("redirect:/list");
-           // mv.addObject("firstName",user.getFirstname());
-
         }
         else{
             path="login";
-          //  mv = new ModelAndView("login");
-           // mv.addObject("message","Username or password is wrong!!");
+            model.addAttribute("message","Username or password is wrong");
         }
      return path;
     }

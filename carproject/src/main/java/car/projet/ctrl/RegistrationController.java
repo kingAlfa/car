@@ -11,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class RegistrationController
@@ -29,11 +31,8 @@ public class RegistrationController
     @RequestMapping(value = "/registerProcess",method = RequestMethod.POST)
     public String addUser(HttpServletRequest request, HttpServletResponse response,
                                 @ModelAttribute("user") Users user){
-        user.setId(12);
+        user.setId();
         userdao.register(user);
-
-
-        //return new ModelAndView("redirect:/list-produit","firstname",user.getFirstname());
         return "redirect:/list";
     }
 }
