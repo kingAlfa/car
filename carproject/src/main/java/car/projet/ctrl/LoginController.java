@@ -29,19 +29,22 @@ public class LoginController
 
 
     @RequestMapping(value = "/loginProcess",method = RequestMethod.POST)
-    public ModelAndView loginProcess(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("login") Login login){
-        ModelAndView mv = null;
+    public String loginProcess(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("login") Login login){
+       // ModelAndView mv = null;
+        String path ="";
        // UserDao userdao = new UserDaoImp();
         Users user = userDaoImp.validateUser(login);
         if (user != null){
-            mv = new ModelAndView("redirect:/list-produit");
-            mv.addObject("firstName",user.getFirstname());
+            path="redirect:/list";
+           // mv = new ModelAndView("redirect:/list");
+           // mv.addObject("firstName",user.getFirstname());
 
         }
         else{
-            mv = new ModelAndView("login");
-            mv.addObject("message","Username or password is wrong!!");
+            path="login";
+          //  mv = new ModelAndView("login");
+           // mv.addObject("message","Username or password is wrong!!");
         }
-     return mv;
+     return path;
     }
 }

@@ -27,11 +27,13 @@ public class RegistrationController
     }
 
     @RequestMapping(value = "/registerProcess",method = RequestMethod.POST)
-    public ModelAndView addUser(HttpServletRequest request, HttpServletResponse response,
+    public String addUser(HttpServletRequest request, HttpServletResponse response,
                                 @ModelAttribute("user") Users user){
-        user.setId(11);
+        user.setId(12);
         userdao.register(user);
 
-        return new ModelAndView("redirect:/list-produit","firstname",user.getFirstname());
+
+        //return new ModelAndView("redirect:/list-produit","firstname",user.getFirstname());
+        return "redirect:/list";
     }
 }
