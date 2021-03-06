@@ -98,4 +98,10 @@ public class ClientController {
 		return "product";
 	}
 
+	@RequestMapping("/login")
+	public String login(Model model){
+		model.addAttribute("message","La page login");
+		return "login";
+	}
+
 }

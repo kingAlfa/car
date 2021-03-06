@@ -23,7 +23,7 @@
       <a class="nav-link" href="#">Ecom</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Home</a>
+      <a class="nav-link" href="/list">Home</a>
     </li>
     <li>
      	<form class="form-inline my-2 my-lg-0">

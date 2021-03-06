@@ -49,7 +49,7 @@
         <th>date</th>
     </tr>
     <c:forEach items="${list}" var="produit">
-        <tr>
+        <tr >
             <td>${produit.urlPhoto } </td>
             <td>${produit.nom_prod}</td>
             <td>${produit.prix}</td>
