@@ -7,23 +7,18 @@ import java.util.List;
 import java.util.Optional;
 
 import car.projet.dao.PanierRepository;
-import car.projet.dao.UserDaoImp;
 import car.projet.dao.UserRepository;
 import car.projet.entites.Panier;
 import car.projet.entites.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import car.projet.dao.ProductRepository;
 import car.projet.entites.Products;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -36,6 +31,7 @@ public class ClientController {
 
 	@Autowired
 	private UserRepository userRepository;
+
 
 
 	@RequestMapping(path = "/produit/{id}")

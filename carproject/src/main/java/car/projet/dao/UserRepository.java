@@ -5,5 +5,5 @@ import org.springframework.data.repository.Repository;
 
 public interface UserRepository extends Repository<Users,Integer>
 {
-    Users findByUsername(String username);
+    public Users findByUsername(String username);
 }

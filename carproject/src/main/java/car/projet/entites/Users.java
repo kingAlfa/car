@@ -1,10 +1,9 @@
 package car.projet.entites;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Users
@@ -86,9 +85,9 @@ public class Users
         int idjust = dateTime.getMinute() + dateTime.getSecond();
         this.id = idjust;
     }
-
-
     public int getId() {
         return id;
     }
+
+
 }

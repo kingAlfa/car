@@ -20,6 +20,22 @@ public class Panier
    // @JoinColumn(name="id")
    // private Products product;
 
+    /**
+     * Je vais associer un utilisateur à chaque ligne du panier
+     * Comme ça j'ai acces à tous les produits correspondant à un utilisateur
+     */
+   /* private int id_User;
+
+    public int getId_User() {
+        return id_User;
+    }
+
+    public void setId_User(int id_User) {
+        this.id_User = id_User;
+    }
+*/
+
+
     public Panier(){}
     public Panier(int id,int quantite ){
         this.id=id;
