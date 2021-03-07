@@ -41,7 +41,7 @@
 
         </tab>
     </form:form>
-    <table align="center">
+    <table >
         <tr>
             <td style="font-style: italic; color: red;">${message}</td>
         </tr>

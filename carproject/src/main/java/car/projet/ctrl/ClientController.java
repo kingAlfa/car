@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 import car.projet.dao.PanierRepository;
+import car.projet.dao.UserDaoImp;
+import car.projet.dao.UserRepository;
 import car.projet.entites.Panier;
+import car.projet.entites.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpRequest;
@@ -25,13 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ClientController {
-	@PersistenceUnit
-	private EntityManagerFactory emf;
-	
+
 	@Autowired
 	private ProductRepository dao;
 	@Autowired
 	private PanierRepository panierDao ;
+
+	@Autowired
+	private UserRepository userRepository;
 
 
 	@RequestMapping(path = "/produit/{id}")
@@ -102,6 +106,14 @@ public class ClientController {
 	public String login(Model model){
 		model.addAttribute("message","La page login");
 		return "login";
+	}
+
+	@RequestMapping("/panier")
+	public String panier(Model model){
+		Users user = userRepository.findByUsername("root");
+		model.addAttribute("username",user.getUsername());
+		model.addAttribute("message","les produits dans le panier");
+		return "panier";
 	}
 
 }

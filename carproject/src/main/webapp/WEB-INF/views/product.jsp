@@ -23,7 +23,7 @@
       <a class="nav-link" href="#">Ecom</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/list">Home</a>
+      <a class="nav-link" href="${pageContext.request.contextPath}/list">Home</a>
     </li>
     <li>
      	<form class="form-inline my-2 my-lg-0">
@@ -35,7 +35,7 @@
       <a class="nav-link" href="#">Mon Compte</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Mon Panier: ${total}</a>
+      <a class="nav-link" href="${pageContext.request.contextPath}/panier">Mon Panier: ${total}</a>
     </li>
   </ul>
 </nav>

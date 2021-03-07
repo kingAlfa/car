@@ -14,7 +14,8 @@
     <title>panier</title>
 </head>
 <body>
-    <p>Votre panier ici</p>
+    <p>${message}</p>
+    <h1>${username}</h1>
     <p>Panier id : ${panier.id}</p>
     <p>Panier quantite : ${panier.quantite}</p>
 
