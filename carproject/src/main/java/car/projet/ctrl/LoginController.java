@@ -43,11 +43,11 @@ public class LoginController
         Users user = userDaoImp.validateUser(login);
         HttpSession session = request.getSession();
         session.setAttribute("userSession",user.getUsername());
-        System.out.println(session.getAttribute("userSession"));
+       // System.out.println(session.getAttribute("userSession"));
         String path ="";
 
         if (user != null){
-            path="redirect:/panier";
+            path="redirect:/list";
         }
         else{
             path="login";

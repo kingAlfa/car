@@ -12,7 +12,7 @@ import car.projet.entites.Panier;
 import car.projet.entites.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -107,6 +107,7 @@ public class ClientController {
 	@RequestMapping("/panier")
 	public String panier(Model model){
 		Users user = userRepository.findByUsername("root");
+
 		model.addAttribute("username",user.getUsername());
 		model.addAttribute("message","les produits dans le panier");
 		return "panier";
