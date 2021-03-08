@@ -60,11 +60,20 @@
 			
 		</tr>
     </table>
-    <form  id="addPanier" action="${pageContext.request.contextPath}/ajouterPanier/${products.id}" method="post">
-        <input name="qte" type="number" value="1">
-        <button type="submit"> Ajouter au panier</button>
-        </form>
+    <c:choose>
+        <c:when test="${sessionScope.userSession != null}">
+            <form  id="addPanier"  action="${pageContext.request.contextPath}/ajouterPanier/${products.id}" method="post">
 
+                <input name="qte" type="number" value="1">
+                <button type="submit"> Ajouter au panier</button>
+            </form>
+        </c:when>
+        <c:when test="${sessionScope.userSession == null}">
+            <%
+                response.sendRedirect("/login");
+            %>
+        </c:when>
+    </c:choose>
 
 
 </body>

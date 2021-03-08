@@ -33,7 +33,6 @@ public class LoginController
 
         ModelAndView mv = new ModelAndView("login");
         mv.addObject("login",new Login());
-
         return mv;
     }
 
@@ -42,7 +41,7 @@ public class LoginController
     public String loginProcess(Model model, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("login") Login login){
         Users user = userDaoImp.validateUser(login);
         HttpSession session = request.getSession();
-        session.setAttribute("userSession",user.getUsername());
+        session.setAttribute("userSession",user);
        // System.out.println(session.getAttribute("userSession"));
         String path ="";
 
