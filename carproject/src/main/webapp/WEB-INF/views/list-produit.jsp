@@ -34,7 +34,15 @@
             <a class="nav-link" href="#">Mon Compte</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/panier">Mon Panier: ${total}</a>
+           <c:choose>
+               <c:when test="${sessionScope.userSession != null}">
+                   <a class="nav-link" href="${pageContext.request.contextPath}/panier">Mon Panier: ${total}</a>
+               </c:when>
+               <c:when test="${sessionScope.userSession == null}">
+                   <a class="nav-link" href="${pageContext.request.contextPath}/login">Mon Panier: ${total}</a>
+               </c:when>
+           </c:choose>
+
         </li>
     </ul>
 </nav>
@@ -50,7 +58,7 @@
     </tr>
     <c:forEach items="${list}" var="produit">
         <tr >
-            <td>${produit.urlPhoto } </td>
+            <td><a href="/produit/${produit.id}"> ${produit.urlPhoto } </td>
             <td>${produit.nom_prod}</td>
             <td>${produit.prix}</td>
             <td>${produit.description }</td>

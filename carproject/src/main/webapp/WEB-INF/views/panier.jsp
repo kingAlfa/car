@@ -15,9 +15,27 @@
 </head>
 <body>
     <p>${message}</p>
-    <h1>${username}</h1>
-    <p>Panier id : ${panier.id}</p>
-    <p>Panier quantite : ${panier.quantite}</p>
+    <h1>Bonjour ${username} !!</h1>
+    <table class="table table-bordered table-striped table-hover ">
+        <tr>
+            <th>Photo</th>
+            <th>Nom </th>
+            <th>Prix</th>
+            <th>description</th>
+            <th>date</th>
+        </tr>
+        <c:forEach items="${list}" var="produit">
+            <tr >
+                <td> ${produit.urlPhoto } </td>
+                <td>${produit.nom_prod}</td>
+                <td>${produit.prix}</td>
+                <td>${produit.description }</td>
+                <td>${produit.date_pub }</td>
+
+            </tr>
+        </c:forEach>
+    </table>
+    <p align="rigth">Total produit : ${total}</p>
 
 </body>
 </html>

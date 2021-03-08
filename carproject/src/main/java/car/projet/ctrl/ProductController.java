@@ -5,6 +5,7 @@ package car.projet.ctrl;
 import java.util.ArrayList;
 import java.util.List;
 import car.projet.dao.PanierRepository;
+import car.projet.entites.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import car.projet.dao.ProductRepository;
 import car.projet.entites.Products;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -22,22 +25,30 @@ public class ProductController {
 	@Autowired
 	private PanierRepository panierDao ;
 
+	//Creation d'un produit et enregistrement
+	//Products prod = new Products("Cate 2","Dell","Libelle Dell ","Ordinateur puissant","Dell","...",2.3);
+	//dao.save(prod);
 
 	@RequestMapping(path = "/produit/{id}")
-	public String client(Model  model,@PathVariable int id) {
+	public String client(HttpServletRequest request, Model  model, @PathVariable int id) {
 
-		//Creation d'un produit et enregistrement
-		//Products prod = new Products("Cate 2","Dell","Libelle Dell ","Ordinateur puissant","Dell","...",2.3);
-		//dao.save(prod);
+		Users user = (Users) request.getSession().getAttribute("userSession");
+		int total=0;
+		if(user != null){
+			//total = panierDao.totalQuantityStock(user.getId());
+			System.out.println(">>Product");
+		}
+		model.addAttribute("total",total);
+
 		Products products = dao.findById(id);
 		model.addAttribute("products",products);
-		int total = panierDao.totalQuantityStock();
-		model.addAttribute("total",total);
+
 		return "product";
 	}
 
 	@RequestMapping("/list")
-	public String list(Model model){
+	public String list(Model model,HttpServletRequest request){
+		Users user = (Users) request.getSession().getAttribute("userSession");
 		//la liste des id des produits avec une quantite superieur à 0
 		List<String> inStock = dao.selectProductsInStock();
 
@@ -50,9 +61,15 @@ public class ProductController {
 		}
 
 		//List<Products> list = (List<Products>) dao.findAll();
-		int total = panierDao.totalQuantityStock();
+		int total;
+		if(user != null){
+			System.out.println(">>> user: "+user.getId());
+			//total = panierDao.totalQuantityStock(user.getId());
+			total = user.getPhone();
+		}else{
+			total=0;
+		}
 		model.addAttribute("total",total);
-
 		model.addAttribute("list",allProd);
 
 		return "list-produit";

@@ -26,7 +26,7 @@ public class Panier
      * Je vais associer un utilisateur à chaque ligne du panier
      * Comme ça j'ai acces à tous les produits correspondant à un utilisateur
      */
-    /*
+
     @Nullable
     private int id_User;
 
@@ -37,7 +37,7 @@ public class Panier
     public void setId_User(int id_User) {
         this.id_User = id_User;
     }
-*/
+
 
 
     public Panier(){}

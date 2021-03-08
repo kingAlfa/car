@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -44,13 +46,15 @@ public class PanierController
         } catch (Exception e) {
 
             Panier panier = new Panier(dao.findById(id).getId(),1);
+            panier.setId_User(user.getId());
+
             Products prod = dao.findById(id);
             //panier.setProduct(prod);
             panierDao.save(panier);
             model.addAttribute("panier",panier);
             //e.printStackTrace();
         }
-        int total = panierDao.totalQuantityStock();
+        int total = panierDao.totalQuantityStock(user.getId());
         model.addAttribute("total",total);
 
         String path = "/produit/"+id;
@@ -59,10 +63,18 @@ public class PanierController
     }
 
     @RequestMapping("/panier")
-    public String panier(Model model){
-        Users user = userRepository.findByUsername("root");
+    public String panier(Model model,HttpServletRequest request){
+        Users user = (Users) request.getSession().getAttribute("userSession");
+        List<Products> listDesProduit = new ArrayList<Products>();
+        List<Integer> listId = panierDao.listIdProduit(user.getId());
+        for(int id :listId){
+            listDesProduit.add(dao.findById(id));
+        }
 
+        int total = panierDao.totalQuantityStock(user.getId());
+        model.addAttribute("list",listDesProduit);
         model.addAttribute("username",user.getUsername());
+        model.addAttribute("total",total);
         model.addAttribute("message","les produits dans le panier");
         return "panier";
     }
