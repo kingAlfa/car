@@ -33,7 +33,6 @@ public class PanierController
     @RequestMapping(path = "/ajouterPanier/{id}",method = RequestMethod.POST)
     public String ajoutPanier(HttpServletRequest request,Model model, @PathVariable int id){
         Users user = (Users) request.getSession().getAttribute("userSession");
-        System.out.println(">>> Session :"+user.getFirstname());
 
         try{
 
@@ -47,19 +46,15 @@ public class PanierController
 
             Panier panier = new Panier(dao.findById(id).getId(),1);
             panier.setId_User(user.getId());
-
             Products prod = dao.findById(id);
-            //panier.setProduct(prod);
             panierDao.save(panier);
             model.addAttribute("panier",panier);
-            //e.printStackTrace();
+
         }
         int total = panierDao.totalQuantityStock(user.getId());
         model.addAttribute("total",total);
-
-        String path = "/produit/"+id;
-        //return "panier";
-        return "redirect:"+path;
+        
+        return "redirect:/list";
     }
 
     @RequestMapping("/panier")

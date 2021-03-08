@@ -35,8 +35,7 @@ public class ProductController {
 		Users user = (Users) request.getSession().getAttribute("userSession");
 		int total=0;
 		if(user != null){
-			//total = panierDao.totalQuantityStock(user.getId());
-			System.out.println(">>Product");
+			total = panierDao.totalQuantityStock(user.getId());
 		}
 		model.addAttribute("total",total);
 
@@ -63,9 +62,9 @@ public class ProductController {
 		//List<Products> list = (List<Products>) dao.findAll();
 		int total;
 		if(user != null){
-			System.out.println(">>> user: "+user.getId());
-			//total = panierDao.totalQuantityStock(user.getId());
-			total = user.getPhone();
+			System.out.println(">>> Product controller : "+user.getId());
+			total = panierDao.totalQuantityStock(user.getId());
+
 		}else{
 			total=0;
 		}

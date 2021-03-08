@@ -85,6 +85,8 @@ public class Users
         int idjust = dateTime.getMinute() + dateTime.getSecond();
         this.id = idjust;
     }
+
+    public void setId(int id){this.id=id;}
     public int getId() {
         return id;
     }

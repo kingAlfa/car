@@ -55,6 +55,7 @@
         <th>Prix</th>
         <th>description</th>
         <th>date</th>
+        <th></th>
     </tr>
     <c:forEach items="${list}" var="produit">
         <tr >
@@ -63,6 +64,23 @@
             <td>${produit.prix}</td>
             <td>${produit.description }</td>
             <td>${produit.date_pub }</td>
+            <td>
+                <c:choose>
+                    <c:when test="${sessionScope.userSession != null}">
+                        <form  id="addPanier"  action="${pageContext.request.contextPath}/ajouterPanier/${produit.id}" method="post">
+
+                            <input name="qte" type="number" value="1" style="width: 60px">
+                            <button type="submit"> Ajouter au panier</button>
+                        </form>
+                    </c:when>
+                    <c:when test="${sessionScope.userSession == null}">
+                        <p> <a href="${pageContext.request.contextPath}/login">Ajouter au Panier</a> </p>
+
+
+                    </c:when>
+                </c:choose>
+
+            </td>
 
         </tr>
     </c:forEach>

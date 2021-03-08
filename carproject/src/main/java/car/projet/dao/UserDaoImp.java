@@ -33,6 +33,9 @@ public class UserDaoImp implements UserDao
     public Users validateUser(Login login) {
         String sql = "select * from users where username='"+login.getUsername()+"'and password='"+login.getPassword()+"'";
         List<Users> users = jdbcTemplate.query(sql,new UserMapper());
+
+        System.out.println(">>> ValideteUser :"+users.get(0).getId());
+
         return users.size() >0 ? users.get(0) : null;
     }
 }
@@ -42,6 +45,7 @@ class UserMapper implements RowMapper<Users> {
     @Override
     public Users mapRow(ResultSet rs, int rowNum) throws SQLException {
         Users user = new Users();
+        user.setId(rs.getInt("id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setFirstname(rs.getString("firstname"));
