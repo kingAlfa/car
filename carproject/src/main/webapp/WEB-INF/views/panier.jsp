@@ -20,8 +20,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <p>${message}</p>
-    <h1>Bonjour ${username} !!</h1>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="#">${username}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/list">Home</a>
+        </li>
+
+    </ul>
+</nav>
+
     <table class="table table-bordered table-striped table-hover ">
         <tr>
             <th>Photo</th>
@@ -41,6 +51,7 @@
             </tr>
         </c:forEach>
     </table>
+    <button align="right">Valider </button>
     <p align="right">Total produit : ${total}</p>
 
 </body>

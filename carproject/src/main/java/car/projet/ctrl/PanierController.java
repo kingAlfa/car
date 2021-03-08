@@ -53,7 +53,7 @@ public class PanierController
         }
         int total = panierDao.totalQuantityStock(user.getId());
         model.addAttribute("total",total);
-        
+
         return "redirect:/list";
     }
 
