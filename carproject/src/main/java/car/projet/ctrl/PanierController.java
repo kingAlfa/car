@@ -2,6 +2,7 @@ package car.projet.ctrl;
 
 import car.projet.dao.PanierRepository;
 import car.projet.dao.ProductRepository;
+import car.projet.dao.StockRepository;
 import car.projet.dao.UserRepository;
 import car.projet.entites.Panier;
 import car.projet.entites.Products;
@@ -29,6 +30,10 @@ public class PanierController
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private StockRepository stockRepository;
 
     @RequestMapping(path = "/ajouterPanier/{id}",method = RequestMethod.POST)
     public String ajoutPanier(HttpServletRequest request,Model model, @PathVariable int id){
