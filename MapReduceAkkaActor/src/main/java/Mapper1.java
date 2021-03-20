@@ -6,7 +6,6 @@ import java.util.List;
 public class Mapper1 extends UntypedAbstractActor implements Mapper {
     @Override
     public void onReceive(Object message) throws Throwable {
-        
 
     }
 
