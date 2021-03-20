@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import car.projet.dao.PanierRepository;
 import car.projet.entites.Users;
+import org.springframework.aop.AopInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,12 +63,21 @@ public class ProductController {
 		//List<Products> list = (List<Products>) dao.findAll();
 		int total;
 		if(user != null){
-			System.out.println(">>> Product controller : "+user.getId());
-			total = panierDao.totalQuantityStock(user.getId());
+			model.addAttribute("username",user.getUsername());
+
+			try{
+				total = panierDao.totalQuantityStock(user.getId());
+
+			}
+			catch (AopInvocationException e){
+				total=0;
+
+			}
 
 		}else{
 			total=0;
 		}
+
 		model.addAttribute("total",total);
 		model.addAttribute("list",allProd);
 

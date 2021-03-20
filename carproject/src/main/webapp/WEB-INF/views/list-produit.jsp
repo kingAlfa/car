@@ -14,7 +14,10 @@
 </head>
 
 <body>
-<h1>Bonjour :</h1>
+<c:if test="${username != null}">
+    <h1>Bonjour : ${username}</h1>
+</c:if>
+
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <ul class="navbar-nav">
@@ -31,7 +34,14 @@
             </form>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Mon Compte</a>
+            <c:choose>
+            <c:when test="${sessionScope.userSession != null}">
+                <a class="nav-link" href="${pageContext.request.contextPath}/register">Mon Compte</a>
+            </c:when>
+                <c:when test="${sessionScope.userSession == null}">
+                    <a class="nav-link" href="#">Mon Compte</a>
+                </c:when>
+            </c:choose>
         </li>
         <li class="nav-item">
            <c:choose>

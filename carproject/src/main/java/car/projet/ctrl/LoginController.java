@@ -61,6 +61,6 @@ public class LoginController
     @RequestMapping(value = "/forLogin/{id}",method = RequestMethod.POST)
     public void forLogin(HttpServletRequest request, HttpServletResponse response, @PathVariable String id){
         idProd = id;
-        System.out.println(">>>>ForLogin "+idProd );
+
     }
 }

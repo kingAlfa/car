@@ -14,10 +14,8 @@
 </head>
 
 <body>
-	<h1>Nom Produit  ${products.nom_prod} ...</h1>
 
-
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
     <li class="nav-item active">
       <a class="nav-link" href="#">Ecom</a>

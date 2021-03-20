@@ -34,7 +34,6 @@ public class UserDaoImp implements UserDao
         String sql = "select * from users where username='"+login.getUsername()+"'and password='"+login.getPassword()+"'";
         List<Users> users = jdbcTemplate.query(sql,new UserMapper());
 
-        System.out.println(">>> ValideteUser :"+users.get(0).getId());
 
         return users.size() >0 ? users.get(0) : null;
     }

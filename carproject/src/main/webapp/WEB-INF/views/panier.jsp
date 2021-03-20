@@ -46,7 +46,7 @@
                 <td>${produit.nom_prod}</td>
                 <td>${produit.prix}</td>
                 <td>${produit.description }</td>
-                <td>0</td>
+                <td></td>
 
             </tr>
         </c:forEach>

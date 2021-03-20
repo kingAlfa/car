@@ -28,9 +28,6 @@ public class PanierController
     @Autowired
     private PanierRepository panierDao ;
 
-    @Autowired
-    private UserRepository userRepository;
-
 
     @Autowired
     private StockRepository stockRepository;
@@ -45,6 +42,10 @@ public class PanierController
             Panier elt = eltPanier.get();
             elt.updateQuantite(1);
             panierDao.save(elt);
+
+            int oldQte = stockRepository.getQuantite(elt.getId());
+            stockRepository.updateQuantite(oldQte-1,elt.getId());
+
             model.addAttribute("panier",elt);
 
         } catch (Exception e) {
@@ -53,6 +54,9 @@ public class PanierController
             panier.setId_User(user.getId());
             Products prod = dao.findById(id);
             panierDao.save(panier);
+
+            int oldQte = stockRepository.getQuantite(panier.getId());
+            stockRepository.updateQuantite(oldQte-1,panier.getId());
             model.addAttribute("panier",panier);
 
         }
@@ -65,6 +69,8 @@ public class PanierController
     @RequestMapping("/panier")
     public String panier(Model model,HttpServletRequest request){
         Users user = (Users) request.getSession().getAttribute("userSession");
+
+
         List<Products> listDesProduit = new ArrayList<Products>();
         List<Integer> listId = panierDao.listIdProduit(user.getId());
         for(int id :listId){
@@ -75,6 +81,7 @@ public class PanierController
         model.addAttribute("list",listDesProduit);
         model.addAttribute("username",user.getUsername());
         model.addAttribute("total",total);
+
         model.addAttribute("message","les produits dans le panier");
         return "panier";
     }
