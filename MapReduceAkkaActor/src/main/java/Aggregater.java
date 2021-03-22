@@ -1,15 +1,15 @@
 import akka.actor.UntypedAbstractActor;
-import scala.Int;
+
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Aggregater extends UntypedAbstractActor {
 
-    private Map<String,Integer> reduceMap = new HashMap<String, Integer>();
+    private final Map<String,Integer> reduceMap = new HashMap<>();
 
     @Override
-    public void onReceive(Object message) throws Throwable {
+    public void onReceive(Object message) {
         if (message instanceof DataReduce ){
             DataReduce reduce = (DataReduce) message;
             countData(reduce.getReduceDataList());
@@ -23,7 +23,7 @@ public class Aggregater extends UntypedAbstractActor {
     }
 
     private void countData(Map<String, Integer> reducedList) {
-        Integer count;
+        int count;
         for (String key : reducedList.keySet()) {
             if (reduceMap.containsKey(key)) {
                 count = reducedList.get(key) + reduceMap.get(key);
