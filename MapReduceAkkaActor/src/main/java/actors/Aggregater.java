@@ -17,6 +17,7 @@ public class Aggregater extends UntypedAbstractActor {
         if (message instanceof DataReduce){
             DataReduce reduce = (DataReduce) message;
             countData(reduce.getReduceDataList());
+            System.out.println(">>Aggregate"+reduceMap.toString());
         }
         else if (message instanceof Messages){
             System.out.println(reduceMap.toString());
