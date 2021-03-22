@@ -17,7 +17,6 @@ public class Aggregater extends UntypedAbstractActor {
         if (message instanceof DataReduce){
             DataReduce reduce = (DataReduce) message;
             countData(reduce.getReduceDataList());
-            //System.out.println(">>Aggregate"+reduceMap.toString());
         }
         else if (message instanceof Messages){
             System.out.println(reduceMap.toString());
@@ -33,7 +32,6 @@ public class Aggregater extends UntypedAbstractActor {
             if (reduceMap.containsKey(key)) {
                 count = reducedList.get(key) + reduceMap.get(key);
                 reduceMap.put(key, count);
-                //System.out.println(">>Aggregate"+reduceMap.toString());
             } else {
                 reduceMap.put(key, reducedList.get(key));
             }

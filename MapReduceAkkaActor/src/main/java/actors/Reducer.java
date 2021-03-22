@@ -18,7 +18,7 @@ public class Reducer extends UntypedAbstractActor  {
 
 
     @Override
-    public void onReceive(Object message) throws Throwable {
+    public void onReceive(Object message) {
         if (message instanceof DataMap){
             DataMap dataMap = (DataMap) message;
             DataReduce dataReduce = reduce(dataMap.getDataList());
