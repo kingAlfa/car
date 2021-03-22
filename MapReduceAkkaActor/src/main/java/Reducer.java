@@ -1,6 +1,9 @@
 import akka.actor.UntypedAbstractActor;
 
-public interface Reducer
-{
-    public void addition(int decompte);
+public class Reducer extends UntypedAbstractActor  {
+    @Override
+    public void onReceive(Object message) throws Throwable {
+
+    }
+
 }

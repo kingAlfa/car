@@ -1,8 +1,13 @@
 import akka.actor.ActorRef;
+import akka.actor.UntypedAbstractActor;
 
 import java.util.List;
 
-public interface Mapper
-{
-    public ActorRef partition(List<Reducer> r, String mot);
+public class Mapper extends UntypedAbstractActor {
+    @Override
+    public void onReceive(Object message) throws Throwable {
+
+    }
+
+
 }
