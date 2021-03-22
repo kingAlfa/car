@@ -32,6 +32,7 @@ public class Aggregater extends UntypedAbstractActor {
             if (reduceMap.containsKey(key)) {
                 count = reducedList.get(key) + reduceMap.get(key);
                 reduceMap.put(key, count);
+                //System.out.println(">>Aggregate"+reduceMap.toString());
             } else {
                 reduceMap.put(key, reducedList.get(key));
             }
