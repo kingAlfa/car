@@ -1,5 +1,9 @@
+package actors;
+
 import akka.actor.ActorRef;
 import akka.actor.UntypedAbstractActor;
+import utils.Count;
+import utils.DataMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +11,7 @@ import java.util.StringTokenizer;
 
 public class Mapper extends UntypedAbstractActor {
 
-    private final ActorRef reducer;
+    private  ActorRef reducer;
 
     public Mapper(ActorRef reducer){
         this.reducer=reducer;

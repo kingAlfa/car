@@ -1,3 +1,4 @@
+import actors.Master;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;

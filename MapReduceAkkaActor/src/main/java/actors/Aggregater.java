@@ -1,4 +1,8 @@
+package actors;
+
 import akka.actor.UntypedAbstractActor;
+import utils.DataReduce;
+import utils.Messages;
 
 
 import java.util.HashMap;
@@ -6,11 +10,11 @@ import java.util.Map;
 
 public class Aggregater extends UntypedAbstractActor {
 
-    private final Map<String,Integer> reduceMap = new HashMap<>();
+    private  Map<String,Integer> reduceMap = new HashMap<>();
 
     @Override
     public void onReceive(Object message) {
-        if (message instanceof DataReduce ){
+        if (message instanceof DataReduce){
             DataReduce reduce = (DataReduce) message;
             countData(reduce.getReduceDataList());
         }

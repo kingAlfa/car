@@ -1,22 +1,27 @@
+package actors;
+
+import actors.Mapper;
+import actors.Reducer;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedAbstractActor;
+import utils.Messages;
 
 import java.util.Random;
 
 public class Master extends UntypedAbstractActor {
 
     //Creation des mapper
-    private final ActorRef mapper1 = getContext().actorOf(Props.create(Mapper.class),"mapper1");
-    private final ActorRef mapper2 = getContext().actorOf(Props.create(Mapper.class),"mapper2");
-    private final ActorRef mapper3 = getContext().actorOf(Props.create(Mapper.class),"mapper3");
+    private  ActorRef mapper1 = getContext().actorOf(Props.create(Mapper.class),"mapper1");
+    private  ActorRef mapper2 = getContext().actorOf(Props.create(Mapper.class),"mapper2");
+    private  ActorRef mapper3 = getContext().actorOf(Props.create(Mapper.class),"mapper3");
 
     //Creation des reducers
-    private final ActorRef reducer1 = getContext().actorOf(Props.create(Reducer.class),"reducer1");
-    private final ActorRef reducer2 = getContext().actorOf(Props.create(Reducer.class),"reducer2");
+    private  ActorRef reducer1 = getContext().actorOf(Props.create(Reducer.class),"reducer1");
+    private  ActorRef reducer2 = getContext().actorOf(Props.create(Reducer.class),"reducer2");
 
     //Creation de l'acteur aggregate
-    private final ActorRef aggregater = getContext().actorOf(Props.create(Aggregater.class),"aggregater");
+    private  ActorRef aggregater = getContext().actorOf(Props.create(Aggregater.class),"aggregater");
 
     @Override
     public void onReceive(Object message) throws Throwable {

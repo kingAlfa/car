@@ -1,3 +1,5 @@
+package utils;
+
 public class Count
 {
     private String word;
