@@ -2,6 +2,7 @@ import actors.Master;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import utils.Messages;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -28,6 +29,8 @@ public class Main
             e.printStackTrace();
         }
         Thread.sleep(500);
-
+        master.tell(new Messages(),master);
+        Thread.sleep(500);
+        
     }
 }
