@@ -10,18 +10,20 @@ import utils.Messages;
 import java.util.Random;
 
 public class Master extends UntypedAbstractActor {
-
-    //Creation des mapper
-    private  ActorRef mapper1 = getContext().actorOf(Props.create(Mapper.class),"mapper1");
-    private  ActorRef mapper2 = getContext().actorOf(Props.create(Mapper.class),"mapper2");
-    private  ActorRef mapper3 = getContext().actorOf(Props.create(Mapper.class),"mapper3");
-
-    //Creation des reducers
-    private  ActorRef reducer1 = getContext().actorOf(Props.create(Reducer.class),"reducer1");
-    private  ActorRef reducer2 = getContext().actorOf(Props.create(Reducer.class),"reducer2");
-
     //Creation de l'acteur aggregate
     private  ActorRef aggregater = getContext().actorOf(Props.create(Aggregater.class),"aggregater");
+
+    //Creation des reducers
+    private  ActorRef reducer1 = getContext().actorOf(Props.create(Reducer.class,aggregater),"reducer1");
+    private  ActorRef reducer2 = getContext().actorOf(Props.create(Reducer.class,aggregater),"reducer2");
+    //Creation des mapper
+    private  ActorRef mapper1 = getContext().actorOf(Props.create(Mapper.class,reducer1,reducer2),"mapper1");
+    private  ActorRef mapper2 = getContext().actorOf(Props.create(Mapper.class,reducer1,reducer2),"mapper2");
+    private  ActorRef mapper3 = getContext().actorOf(Props.create(Mapper.class,reducer1,reducer2),"mapper3");
+
+
+
+
 
     @Override
     public void onReceive(Object message) throws Throwable {

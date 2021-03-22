@@ -12,9 +12,15 @@ import java.util.StringTokenizer;
 public class Mapper extends UntypedAbstractActor {
 
     private  ActorRef reducer;
+    private  ActorRef reducer2;
+    List<ActorRef> reducerList =new ArrayList<>();
 
-    public Mapper(ActorRef reducer){
+    public Mapper(ActorRef reducer,ActorRef reducer2){
         this.reducer=reducer;
+        this.reducer2=reducer2;
+        this.reducerList.add(reducer);
+        this.reducerList.add(reducer2);
+
     }
 
 
@@ -41,6 +47,7 @@ public class Mapper extends UntypedAbstractActor {
         }
         return new DataMap(dataList);
     }
+
 
 
 }

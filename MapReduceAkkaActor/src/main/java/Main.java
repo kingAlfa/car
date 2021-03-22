@@ -12,7 +12,9 @@ public class Main
 {
     public static void main(String[] args) throws InterruptedException {
         ActorSystem system = ActorSystem.create("AkkaMapReduce");
+
         ActorRef master = system.actorOf(Props.create(Master.class),"master");
+
         final String fileName = "file.txt";
         BufferedReader reader;
         try{
@@ -22,8 +24,6 @@ public class Main
                 master.tell(line,master);
                 line= reader.readLine();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
