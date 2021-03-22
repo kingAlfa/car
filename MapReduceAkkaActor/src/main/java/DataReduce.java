@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class DataReduce
 {
-    private Map<String, Integer> reduceDataList;
+    private final Map<String, Integer> reduceDataList;
 
     public Map<String, Integer> getReduceDataList() {
         return reduceDataList;
