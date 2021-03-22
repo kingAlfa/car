@@ -31,6 +31,6 @@ public class Main
         Thread.sleep(500);
         master.tell(new Messages(),master);
         Thread.sleep(500);
-        
+        system.terminate();
     }
 }

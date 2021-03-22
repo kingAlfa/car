@@ -14,6 +14,10 @@ public class Mapper extends UntypedAbstractActor {
     private List<ActorRef> reducerList =new ArrayList<>();
     private Map<ActorRef,String> mapActor = new HashMap<>();
 
+    private String[] IGNORE = {"le","la","!", "de","du","se","ce","à","ses","sa","d'un","un","dans","en","et","c'est","a","pour","où","s'est","qui","que","d'une"
+            ,"les","des",""};
+    private List<String> motIgnorer = Arrays.asList(IGNORE);
+
     public Mapper(ActorRef reducer,ActorRef reducer2){
         this.reducer=reducer;
         this.reducer2=reducer2;
@@ -52,7 +56,11 @@ public class Mapper extends UntypedAbstractActor {
         StringTokenizer parser = new StringTokenizer(msg);
         while (parser.hasMoreTokens()) {
             String word = parser.nextToken().toLowerCase();
-            dataList.add(new Count(word, 1));
+            if (!motIgnorer.contains(word))
+            {
+                dataList.add(new Count(word, 1));
+            }
+
 
         }
         return new DataMap(dataList);
